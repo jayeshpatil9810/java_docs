@@ -1,6 +1,5 @@
 package com.demo.shutterstockApi.controller;
 
-import com.demo.shutterstockApi.dto.DataDto;
 import com.demo.shutterstockApi.dto.ResponseDto;
 import com.demo.shutterstockApi.entity.Data;
 import com.demo.shutterstockApi.service.DataService;
