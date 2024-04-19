@@ -3,9 +3,9 @@ spring:
     name: shutterstockApi
 
   datasource:
-    url: jdbc:mysql://localhost:3306/dup_shutterstock?useSSL=false&serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://shutterstock-db.ctgq828si44a.ap-south-1.rds.amazonaws.com:3306/shutterstock
     username: root
-    password: Suvam@123
+    password: Suvam123
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     properties:
