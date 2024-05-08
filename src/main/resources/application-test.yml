@@ -1,10 +1,7 @@
 spring:
   application:
-    name: shutterstockApi-prod
+    name: shutterstockApi-test
 
-  output:
-    ansi:
-      enabled: ALWAYS
 
   datasource:
     url: jdbc:mysql://localhost:3306/shutterstock
@@ -21,7 +18,9 @@ spring:
       ddl-auto: update
     show-sql: true
 
+server:
+  port: 8081
 
 logging:
   file:
-    name: ./logs/myapp.log
+    name: ./logs/sstk-test.log

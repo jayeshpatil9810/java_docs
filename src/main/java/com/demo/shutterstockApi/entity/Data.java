@@ -1,9 +1,10 @@
 package com.demo.shutterstockApi.entity;
 
 
+import com.demo.shutterstockApi.config.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.*;
-import lombok.*;
-
+import java.time.LocalDateTime;
 
 
 @Entity
@@ -14,7 +15,8 @@ public class Data {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private String verdict_time;
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    private LocalDateTime verdict_time;
 
     private String user_name;
 
@@ -32,10 +34,9 @@ public class Data {
 
     private String keywords;
 
+
     // All args constructor
-
-
-    public Data(int id, String verdict_time, String user_name, String item_id, String contributor, String verdict, String reason, String ratings, String title, String keywords) {
+    public Data(int id, LocalDateTime verdict_time, String user_name, String item_id, String contributor, String verdict, String reason, String ratings, String title, String keywords) {
         this.id = id;
         this.verdict_time = verdict_time;
         this.user_name = user_name;
@@ -61,11 +62,11 @@ public class Data {
         this.id = id;
     }
 
-    public String getVerdict_time() {
+    public LocalDateTime getVerdict_time() {
         return verdict_time;
     }
 
-    public void setVerdict_time(String verdict_time) {
+    public void setVerdict_time(LocalDateTime verdict_time) {
         this.verdict_time = verdict_time;
     }
 
