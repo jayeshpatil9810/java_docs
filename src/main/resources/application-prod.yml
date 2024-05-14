@@ -2,11 +2,14 @@ spring:
   application:
     name: shutterstockApi-prod
 
+  output:
+    ansi:
+      enabled: ALWAYS
 
   datasource:
-    url: jdbc:mysql://localhost:3306/shutterstock
+    url: jdbc:mysql://localhost:3306/sstk
     username: root
-    password: Suvam@123
+    password: Sstk@2024
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     properties:
@@ -23,4 +26,4 @@ server:
 
 logging:
   file:
-    name: ./logs/sstk-prod.log
+    name: sstk-prod.log

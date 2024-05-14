@@ -1,6 +1,6 @@
 spring:
   application:
-    name: shutterstockApi-prod
+    name: shutterstockApi-dev
 
   output:
     ansi:
@@ -22,6 +22,3 @@ spring:
     show-sql: true
 
 
-logging:
-  file:
-    name: ./logs/myapp.log

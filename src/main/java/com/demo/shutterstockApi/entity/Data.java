@@ -1,7 +1,7 @@
 package com.demo.shutterstockApi.entity;
 
 
-import com.demo.shutterstockApi.config.LocalDateTimeDeserializer;
+import com.demo.shutterstockApi.config.DumpDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -9,13 +9,13 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "dump")
+@JsonDeserialize(using = DumpDeserializer.class)
 public class Data {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime verdict_time;
 
     private String user_name;
