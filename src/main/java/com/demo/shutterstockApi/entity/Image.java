@@ -1,16 +1,16 @@
 package com.demo.shutterstockApi.entity;
 
 
-import com.demo.shutterstockApi.config.DumpDeserializer;
+import com.demo.shutterstockApi.config.ImageDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 
 @Entity
-@Table(name = "dump")
-@JsonDeserialize(using = DumpDeserializer.class)
-public class Data {
+@Table(name = "image")
+@JsonDeserialize(using = ImageDeserializer.class)
+public class Image {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,9 +34,16 @@ public class Data {
 
     private String keywords;
 
+    private String category;
+    private String sub_category;
+
+    public Image(){
+
+    }
+
 
     // All args constructor
-    public Data(int id, LocalDateTime verdict_time, String user_name, String item_id, String contributor, String verdict, String reason, String ratings, String title, String keywords) {
+    public Image(int id, LocalDateTime verdict_time, String user_name, String item_id, String contributor, String verdict, String reason, String ratings, String title, String keywords, String category, String sub_category) {
         this.id = id;
         this.verdict_time = verdict_time;
         this.user_name = user_name;
@@ -47,13 +54,10 @@ public class Data {
         this.ratings = ratings;
         this.title = title;
         this.keywords = keywords;
+        this.category = category;
+        this.sub_category = sub_category;
     }
 
-    // no args constructor
-    public Data() {
-    }
-
-    // Getters and Setters
     public int getId() {
         return id;
     }
@@ -76,6 +80,14 @@ public class Data {
 
     public void setUser_name(String user_name) {
         this.user_name = user_name;
+    }
+
+    public String getItem_id() {
+        return item_id;
+    }
+
+    public void setItem_id(String item_id) {
+        this.item_id = item_id;
     }
 
     public String getContributor() {
@@ -126,20 +138,27 @@ public class Data {
         this.keywords = keywords;
     }
 
-    public String getItem_id() {
-        return item_id;
+    public String getCategory() {
+        return category;
     }
 
-    public void setItem_id(String item_id) {
-        this.item_id = item_id;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
-    // toString
+    public String getSub_category() {
+        return sub_category;
+    }
+
+    public void setSub_category(String sub_category) {
+        this.sub_category = sub_category;
+    }
+
     @Override
     public String toString() {
-        return "Data{" +
+        return "Image{" +
                 "id=" + id +
-                ", verdict_time='" + verdict_time + '\'' +
+                ", verdict_time=" + verdict_time +
                 ", user_name='" + user_name + '\'' +
                 ", item_id='" + item_id + '\'' +
                 ", contributor='" + contributor + '\'' +
@@ -148,6 +167,11 @@ public class Data {
                 ", ratings='" + ratings + '\'' +
                 ", title='" + title + '\'' +
                 ", keywords='" + keywords + '\'' +
+                ", category='" + category + '\'' +
+                ", sub_category='" + sub_category + '\'' +
                 '}';
     }
 }
+
+
+

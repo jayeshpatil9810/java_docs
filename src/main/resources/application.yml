@@ -9,7 +9,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/shutterstock
     username: root
-    password: Suvam@123
+    password: mail_123
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     properties:
