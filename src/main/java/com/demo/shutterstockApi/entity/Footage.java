@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class Footage {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private LocalDateTime verdict_time;
     private String user_name;
