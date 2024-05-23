@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.deser.impl.FailingDeserializer;
 import jakarta.persistence.*;
 
+import java.sql.Time;
 import java.time.LocalDateTime;
 
 @Entity
@@ -29,8 +30,9 @@ public class Footage {
     private String rate;
     private String ratio;
     private String size;
+    private Time duration;
 
-    public Footage(int id, LocalDateTime verdict_time, String user_name, String item_id, String contributor, String verdict, String reason, String title, String keywords, String category, String sub_category, String resolution, String rate, String ratio, String size) {
+    public Footage(int id, LocalDateTime verdict_time, String user_name, String item_id, String contributor, String verdict, String reason, String title, String keywords, String category, String sub_category, String resolution, String rate, String ratio, String size,Time duration) {
         this.id = id;
         this.verdict_time = verdict_time;
         this.user_name = user_name;
@@ -46,6 +48,7 @@ public class Footage {
         this.rate = rate;
         this.ratio = ratio;
         this.size = size;
+        this.duration = duration;
     }
 
     public Footage() {
@@ -171,8 +174,14 @@ public class Footage {
 
     public void setSize(String size) {
         this.size = size;
+    }
 
+    public Time getDuration() {
+        return duration;
+    }
 
+    public void setDuration(Time duration) {
+        this.duration = duration;
     }
 
     @Override
@@ -193,6 +202,7 @@ public class Footage {
                 ", rate='" + rate + '\'' +
                 ", ratio='" + ratio + '\'' +
                 ", size='" + size + '\'' +
+                ", duration=" + duration +
                 '}';
     }
 }

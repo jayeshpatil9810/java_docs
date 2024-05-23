@@ -1,13 +1,13 @@
 spring:
   application:
-    name: shutterstockApi-test
+    name: shutterstockApi-image-footage
 
   output:
     ansi:
       enabled: ALWAYS
 
   datasource:
-    url: jdbc:mysql://localhost:3306/sstk-test
+    url: jdbc:mysql://localhost:3306/sstk_image_footage
     username: root
     password: Sstk@2024
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -26,4 +26,4 @@ server:
 
 logging:
   file:
-    name: sstk-test.log
+    name: sstk-if.log

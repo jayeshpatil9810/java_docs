@@ -4,46 +4,87 @@ import com.demo.shutterstockApi.entity.Footage;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.sql.Time;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class FootageDeserializer extends JsonDeserializer<Footage> {
     private static final Logger LOGGER = LoggerFactory.getLogger(FootageDeserializer.class);
-
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
 
     @Override
     public Footage deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
-        ObjectNode node = jp.readValueAsTree();
-        try {
-            Footage obj = new Footage();
-            String dateTimeStr = node.get("verdict_time").asText();
-            obj.setVerdict_time(LocalDateTime.parse(dateTimeStr, formatter));
-            obj.setUser_name(node.get("user_name").asText());
-            obj.setItem_id(node.get("item_id").asText());
-            obj.setContributor(node.get("contributor").asText());
-            obj.setVerdict(node.get("verdict").asText());
-            obj.setReason(node.get("reason").asText());
-            obj.setRate(node.get("rate").asText());
-            obj.setTitle(node.get("title").asText());
-            obj.setKeywords(node.get("keywords").asText());
-            obj.setCategory(node.get("category").asText());
-            obj.setSub_category(node.get("sub_category").asText());
-            obj.setResolution(node.get("resolution").asText());
-            obj.setSize(node.get("size").asText());
-            obj.setRatio(node.get("ratio").asText());
-            // Set other fields...
+        ObjectMapper mapper = (ObjectMapper) jp.getCodec();
+        JsonNode node = jp.readValueAsTree();
+        return deserializeSingle(node, mapper);
+    }
 
-            return obj;
+    private Footage deserializeSingle(JsonNode node, ObjectMapper mapper) throws IOException {
+        try {
+            Footage footage = new Footage();
+            footage.setVerdict_time(parseVerdictTime(node));
+            footage.setUser_name(getTextValue(node, "user_name"));
+            footage.setItem_id(getTextValue(node, "item_id"));
+            footage.setContributor(getTextValue(node, "contributor"));
+            footage.setVerdict(getTextValue(node, "verdict"));
+            footage.setReason(getTextValue(node, "reason"));
+            footage.setRate(getTextValue(node, "rate"));
+            footage.setTitle(getTextValue(node, "title"));
+            footage.setKeywords(getTextValue(node, "keywords"));
+            footage.setCategory(getTextValue(node, "category"));
+            footage.setSub_category(getTextValue(node, "sub_category"));
+            footage.setResolution(getTextValue(node, "resolution"));
+            footage.setSize(getTextValue(node, "size"));
+            footage.setRatio(getTextValue(node, "ratio"));
+            footage.setDuration(parseDuration(getTextValue(node, "duration")));
+            return footage;
         } catch (Exception e) {
-            LOGGER.error("ERROR at verdict_time deserialization {}", e.getMessage());
-            LOGGER.error("Request Body {}", node.toString());
+            LOGGER.error("Error deserializing Footage object: {}", e.getMessage(), e);
+            LOGGER.error("Request Body: {}", node.toString());
             throw new IOException("Error while deserializing Footage object", e);
+        }
+    }
+
+    private LocalDateTime parseVerdictTime(JsonNode node) throws IOException {
+        JsonNode verdictTimeNode = node.get("verdict_time");
+        if (verdictTimeNode == null || verdictTimeNode.isNull()) {
+            LOGGER.error("verdict_time is missing or null in the JSON input.");
+            throw new IllegalArgumentException("verdict_time is required but is missing or null.");
+        }
+        String dateTimeStr = verdictTimeNode.asText();
+        try {
+            return LocalDateTime.parse(dateTimeStr, FORMATTER);
+        } catch (DateTimeParseException e) {
+            LOGGER.error("Failed to parse verdict_time: {}", dateTimeStr, e);
+            throw new IllegalArgumentException("Invalid format for verdict_time: " + dateTimeStr, e);
+        }
+    }
+
+    private String getTextValue(JsonNode node, String fieldName) {
+        JsonNode fieldNode = node.get(fieldName);
+        return fieldNode != null ? fieldNode.asText() : null;
+    }
+
+    private Time parseDuration(String durationStr) {
+        try {
+            // Split the duration string into hours, minutes, and seconds
+            String[] parts = durationStr.split(":");
+            int hours = Integer.parseInt(parts[0]);
+            int minutes = Integer.parseInt(parts[1]);
+            int seconds = Integer.parseInt(parts[2]);
+
+            // Create a Time object using the parsed values
+            return Time.valueOf(String.format("%02d:%02d:%02d", hours, minutes, seconds));
+        } catch (Exception e) {
+            LOGGER.error("Error parsing duration: {}", e.getMessage(), e);
+            return null;
         }
     }
 }
