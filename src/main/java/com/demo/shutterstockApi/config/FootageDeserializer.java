@@ -74,17 +74,24 @@ public class FootageDeserializer extends JsonDeserializer<Footage> {
 
     private Time parseDuration(String durationStr) {
         try {
-            // Split the duration string into hours, minutes, and seconds
-            String[] parts = durationStr.split(":");
-            int hours = Integer.parseInt(parts[0]);
-            int minutes = Integer.parseInt(parts[1]);
-            int seconds = Integer.parseInt(parts[2]);
-
-            // Create a Time object using the parsed values
-            return Time.valueOf(String.format("%02d:%02d:%02d", hours, minutes, seconds));
+            // Validate the duration string
+            if (durationStr.matches("\\d{2}:\\d{2}:\\d{2}")) {
+                // Handle HH:MM:SS format
+                String[] parts = durationStr.split(":");
+                int hours = Integer.parseInt(parts[0]);
+                int minutes = Integer.parseInt(parts[1]);
+                int seconds = Integer.parseInt(parts[2]);
+                return Time.valueOf(String.format("%02d:%02d:%02d", hours, minutes, seconds));
+            } else {
+                // Throw an exception for invalid format
+                throw new IllegalArgumentException("Invalid duration format: " + durationStr);
+            }
         } catch (Exception e) {
-            LOGGER.error("Error parsing duration: {}", e.getMessage(), e);
-            return null;
+            LOGGER.error("Error parsing duration '{}': {}", durationStr, e.getMessage(), e);
+            throw new IllegalArgumentException("Error parsing duration: " + durationStr, e);
         }
     }
+
+
+
 }
