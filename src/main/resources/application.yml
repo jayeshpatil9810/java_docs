@@ -11,6 +11,13 @@ spring:
     username: root
     password: mail_123
     driver-class-name: com.mysql.cj.jdbc.Driver
+
+    minimumIdle: 30
+    maximumPoolSize: 100
+    idleTimeout: 10000
+    connectionTimeout: 30000
+    poolName: ShutterstockHikariCP
+
   jpa:
     properties:
       hibernate:
