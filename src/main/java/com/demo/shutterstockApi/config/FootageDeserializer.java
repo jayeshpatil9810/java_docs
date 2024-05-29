@@ -1,6 +1,7 @@
 package com.demo.shutterstockApi.config;
 
 import com.demo.shutterstockApi.entity.Footage;
+import com.demo.shutterstockApi.exception.InvalidDurationFormatException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
@@ -35,6 +36,7 @@ public class FootageDeserializer extends JsonDeserializer<Footage> {
             footage.setContributor(getTextValue(node, "contributor"));
             footage.setVerdict(getTextValue(node, "verdict"));
             footage.setReason(getTextValue(node, "reason"));
+            footage.setRatings(getTextValue(node,"ratings"));
             footage.setRate(getTextValue(node, "rate"));
             footage.setTitle(getTextValue(node, "title"));
             footage.setKeywords(getTextValue(node, "keywords"));
@@ -74,24 +76,20 @@ public class FootageDeserializer extends JsonDeserializer<Footage> {
 
     private Time parseDuration(String durationStr) {
         try {
-            // Validate the duration string
             if (durationStr.matches("\\d{2}:\\d{2}:\\d{2}")) {
-                // Handle HH:MM:SS format
                 String[] parts = durationStr.split(":");
                 int hours = Integer.parseInt(parts[0]);
                 int minutes = Integer.parseInt(parts[1]);
                 int seconds = Integer.parseInt(parts[2]);
                 return Time.valueOf(String.format("%02d:%02d:%02d", hours, minutes, seconds));
             } else {
-                // Throw an exception for invalid format
-                throw new IllegalArgumentException("Invalid duration format: " + durationStr);
+                throw new InvalidDurationFormatException("Invalid duration format: " + durationStr);
             }
         } catch (Exception e) {
-            LOGGER.error("Error parsing duration '{}': {}", durationStr, e.getMessage(), e);
-            throw new IllegalArgumentException("Error parsing duration: " + durationStr, e);
+            LOGGER.error("Error parsing duration '{}': {}", durationStr, e.getMessage(),e);
+            throw new InvalidDurationFormatException("Error parsing duration: " + durationStr, e);
         }
+
+
     }
-
-
-
 }
