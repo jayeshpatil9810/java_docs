@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @JsonDeserialize(using = FootageDeserializer.class)
 public class Footage {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -22,6 +23,7 @@ public class Footage {
     private String contributor;
     private String verdict;
     private String reason;
+    private String ratings;
     private String title;
     private String keywords;
     private String category;
@@ -32,27 +34,7 @@ public class Footage {
     private String size;
     private Time duration;
 
-    public Footage(int id, LocalDateTime verdict_time, String user_name, String item_id, String contributor, String verdict, String reason, String title, String keywords, String category, String sub_category, String resolution, String rate, String ratio, String size,Time duration) {
-        this.id = id;
-        this.verdict_time = verdict_time;
-        this.user_name = user_name;
-        this.item_id = item_id;
-        this.contributor = contributor;
-        this.verdict = verdict;
-        this.reason = reason;
-        this.title = title;
-        this.keywords = keywords;
-        this.category = category;
-        this.sub_category = sub_category;
-        this.resolution = resolution;
-        this.rate = rate;
-        this.ratio = ratio;
-        this.size = size;
-        this.duration = duration;
-    }
-
     public Footage() {
-
 
     }
 
@@ -110,6 +92,14 @@ public class Footage {
 
     public void setReason(String reason) {
         this.reason = reason;
+    }
+
+    public String getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(String ratings) {
+        this.ratings = ratings;
     }
 
     public String getTitle() {
@@ -184,6 +174,26 @@ public class Footage {
         this.duration = duration;
     }
 
+    public Footage(int id, LocalDateTime verdict_time, String user_name, String item_id, String contributor, String verdict, String reason, String ratings, String title, String keywords, String category, String sub_category, String resolution, String rate, String ratio, String size, Time duration) {
+        this.id = id;
+        this.verdict_time = verdict_time;
+        this.user_name = user_name;
+        this.item_id = item_id;
+        this.contributor = contributor;
+        this.verdict = verdict;
+        this.reason = reason;
+        this.ratings = ratings;
+        this.title = title;
+        this.keywords = keywords;
+        this.category = category;
+        this.sub_category = sub_category;
+        this.resolution = resolution;
+        this.rate = rate;
+        this.ratio = ratio;
+        this.size = size;
+        this.duration = duration;
+    }
+
     @Override
     public String toString() {
         return "Footage{" +
@@ -194,6 +204,7 @@ public class Footage {
                 ", contributor='" + contributor + '\'' +
                 ", verdict='" + verdict + '\'' +
                 ", reason='" + reason + '\'' +
+                ", ratings='" + ratings + '\'' +
                 ", title='" + title + '\'' +
                 ", keywords='" + keywords + '\'' +
                 ", category='" + category + '\'' +
@@ -206,5 +217,3 @@ public class Footage {
                 '}';
     }
 }
-
-
