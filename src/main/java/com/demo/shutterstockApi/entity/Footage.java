@@ -1,22 +1,23 @@
 package com.demo.shutterstockApi.entity;
 
-import com.demo.shutterstockApi.config.FootageDeserializer;
+import com.demo.shutterstockApi.config.DurationDeserializer;
+import com.demo.shutterstockApi.config.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.deser.impl.FailingDeserializer;
 import jakarta.persistence.*;
 
 import java.sql.Time;
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "footage")
-@JsonDeserialize(using = FootageDeserializer.class)
 public class Footage {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime verdict_time;
     private String user_name;
     private String item_id;
@@ -32,7 +33,8 @@ public class Footage {
     private String rate;
     private String ratio;
     private String size;
-    private Time duration;
+    @JsonDeserialize(using = DurationDeserializer.class)
+    private int duration;
 
     public Footage() {
 
@@ -166,15 +168,17 @@ public class Footage {
         this.size = size;
     }
 
-    public Time getDuration() {
+    public int getDuration() {
         return duration;
     }
 
-    public void setDuration(Time duration) {
+    public void setDuration(int duration) {
         this.duration = duration;
     }
 
-    public Footage(int id, LocalDateTime verdict_time, String user_name, String item_id, String contributor, String verdict, String reason, String ratings, String title, String keywords, String category, String sub_category, String resolution, String rate, String ratio, String size, Time duration) {
+    public Footage(int id, LocalDateTime verdict_time, String user_name, String item_id, String contributor,
+            String verdict, String reason, String ratings, String title, String keywords, String category,
+            String sub_category, String resolution, String rate, String ratio, String size, int duration) {
         this.id = id;
         this.verdict_time = verdict_time;
         this.user_name = user_name;

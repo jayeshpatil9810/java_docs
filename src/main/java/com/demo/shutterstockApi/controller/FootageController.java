@@ -46,12 +46,4 @@ public class FootageController {
                     .body(new ResponseDto("500", "Internal Server Error"));
         }
     }
-
-    @GetMapping("/get-data")
-    public ResponseEntity<ResponseDto> getData() {
-        LOGGER.info("Data retrieved successfully");
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(new ResponseDto("200", "Data retrieved successfully"));
-    }
 }

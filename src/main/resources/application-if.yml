@@ -11,22 +11,22 @@ spring:
     username: root
     password: Sstk@2024
     driver-class-name: com.mysql.cj.jdbc.Driver
-
-    minimumIdle: 30
-    maximumPoolSize: 100
-    idleTimeout: 10000
-    connectionTimeout: 30000
-    poolName: ShutterstockHikariCP
+    hikari:
+      minimum-idle: 10
+      maximum-pool-size: 100
+      idle-timeout: 10000
+      connection-timeout: 60000
+      pool-name: ShutterstockHikariCP
+      connection-test-query: SELECT 1
+      max-lifetime: 1800000
 
   jpa:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
         format_sql: true
-        use_sql_comments: true
     hibernate:
       ddl-auto: update
-    show-sql: true
 
 server:
   port: 8081
@@ -34,3 +34,4 @@ server:
 logging:
   file:
     name: sstk-if.log
+    

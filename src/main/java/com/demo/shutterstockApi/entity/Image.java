@@ -1,21 +1,19 @@
 package com.demo.shutterstockApi.entity;
 
-
-import com.demo.shutterstockApi.config.ImageDeserializer;
+import com.demo.shutterstockApi.config.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
-
 @Entity
 @Table(name = "image")
-@JsonDeserialize(using = ImageDeserializer.class)
 public class Image {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime verdict_time;
 
     private String user_name;
@@ -37,13 +35,14 @@ public class Image {
     private String category;
     private String sub_category;
 
-    public Image(){
+    public Image() {
 
     }
 
-
     // All args constructor
-    public Image(int id, LocalDateTime verdict_time, String user_name, String item_id, String contributor, String verdict, String reason, String ratings, String title, String keywords, String category, String sub_category) {
+    public Image(int id, LocalDateTime verdict_time, String user_name, String item_id, String contributor,
+            String verdict, String reason, String ratings, String title, String keywords, String category,
+            String sub_category) {
         this.id = id;
         this.verdict_time = verdict_time;
         this.user_name = user_name;
@@ -172,6 +171,3 @@ public class Image {
                 '}';
     }
 }
-
-
-
