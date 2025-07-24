@@ -1,0 +1,131 @@
+{
+	"info": {
+		"_postman_id": "8798fe9d-ffc6-47f5-aace-3f171760e984",
+		"name": "EmployeeService",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "31229961"
+	},
+	"item": [
+		{
+			"name": "AddEmployee",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\":\"ajay\",\r\n    \"lastName\":\"upadhyay\",\r\n    \"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9191/api/employee/add",
+					"host": [
+						"localhost"
+					],
+					"port": "9191",
+					"path": [
+						"api",
+						"employee",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetEmployeeById",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:9191/api/employee/getbyid/17",
+					"host": [
+						"localhost"
+					],
+					"port": "9191",
+					"path": [
+						"api",
+						"employee",
+						"getbyid",
+						"17"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PutRequest",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\":\"ajay deep\",\r\n    \"lastName\":\"upadhyay\",\r\n    \"email\":\"ajay.upadhyay@v2solutions.com\",\r\n    \"departmentCode\":\"ADM01\",\r\n    \"organizationCode\":\"V2001\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9191/api/employee/update/17",
+					"host": [
+						"localhost"
+					],
+					"port": "9191",
+					"path": [
+						"api",
+						"employee",
+						"update",
+						"17"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteEmployee",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:9191/api/employee/delete/17",
+					"host": [
+						"localhost"
+					],
+					"port": "9191",
+					"path": [
+						"api",
+						"employee",
+						"delete",
+						"17"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAllEmployee",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:9191/api/employee/getall",
+					"host": [
+						"localhost"
+					],
+					"port": "9191",
+					"path": [
+						"api",
+						"employee",
+						"getall"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,54 @@
+spring:
+
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://dev-52786026.okta.com/oauth2/default
+          audience: api://default
+      client:
+        registration:
+          my-internal-client:
+            provider: okta
+            authorization-grant-type: client_credentials
+            scope: internal
+            client-id: 0oab12nv73lSfbnwy5d7
+            client-secret: U7LT6XEXRXwpJpVhpbdlEnTd5M-4gT6tEjTTDzv6cY1-2tWyAbFAAwqnVf90GFOz
+        provider:
+          okta:
+            issuer-uri: https://dev-52786026.okta.com/oauth2/default
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    url: jdbc:mysql://localhost:3306/shopnest
+    password: Suvam@123
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: 'true'
+  application:
+      name: cart-module      
+server:
+  port: '9092'
+url: http://localhost:8082/api/product/getid/
+
+    
+# Eureka 
+eureka:
+   client:
+      serviceUrl:
+         defaultZone: http://localhost:8761/eureka
+      instance:
+      preferIpAddress: true
+
+
+# Okta Configuration
+okta:
+  oauth2:
+    issuer: https://dev-52786026.okta.com/oauth2/default
+    audience: api://default

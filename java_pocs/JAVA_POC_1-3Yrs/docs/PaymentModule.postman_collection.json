@@ -1,0 +1,40 @@
+{
+	"info": {
+		"_postman_id": "87ca3dcf-30c4-489a-a7f0-0889a7e021aa",
+		"name": "PaymentModule",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30241825"
+	},
+	"item": [
+		{
+			"name": "createOrder",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8085/paypal/init?sum=40&userId=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"paypal",
+						"init"
+					],
+					"query": [
+						{
+							"key": "sum",
+							"value": "40"
+						},
+						{
+							"key": "userId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

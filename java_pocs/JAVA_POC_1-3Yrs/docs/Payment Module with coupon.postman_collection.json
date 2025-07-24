@@ -1,0 +1,35 @@
+{
+	"info": {
+		"_postman_id": "3ff3332a-4b13-4820-ba54-8aecd420cb5a",
+		"name": "Payment Module",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29445906"
+	},
+	"item": [
+		{
+			"name": "init",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/paypal/init?sum=20",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"paypal",
+						"init"
+					],
+					"query": [
+						{
+							"key": "sum",
+							"value": "20"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+            
+    
+    <wb-module deploy-name="rasmita.v2.app">
+                        
+        
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
+                        
+        
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+                
+        <wb-resource deploy-path="/" source-path="/target/m2e-wtp/ear-resources"/>
+                
+        <wb-resource deploy-path="/" source-path="/src/main/application" tag="defaultRootSource"/>
+        <dependent-module archiveName="rasmita-in-web.war" deploy-path="/" handle="module:/resource/rasmita-in-web/rasmita-in-web">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="rasmita-in-ejb.jar" deploy-path="/" handle="module:/resource/rasmita-in-ejb/rasmita-in-ejb">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="javax.ejb-api.jar" deploy-path="/lib" handle="module:/classpath/var/M2_REPO/javax/ejb/javax.ejb-api/3.2/javax.ejb-api-3.2.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="javax.transaction-api.jar" deploy-path="/lib" handle="module:/classpath/var/M2_REPO/javax/transaction/javax.transaction-api/1.2/javax.transaction-api-1.2.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+                        
+        
+        <property name="context-root" value="rasmita.v2.app"/>
+                        
+        
+        <property name="java-output-path" value="/rasmita.v2.app/target/classes"/>
+                    
+    
+    </wb-module>
+        
+
+</project-modules>

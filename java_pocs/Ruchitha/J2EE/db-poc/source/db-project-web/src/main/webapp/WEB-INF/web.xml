@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1">
+
+  
+  <display-name>db-project-web</display-name>
+  
+  <welcome-file-list>
+    
+    
+    <welcome-file>userDetails.jsp</welcome-file>
+    
+  </welcome-file-list>
+  <servlet>
+    <description></description>
+    <display-name>UsersServlet</display-name>
+    <servlet-name>UsersServlet</servlet-name>
+    <servlet-class>com.v2.servlet.UsersServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UsersServlet</servlet-name>
+    <url-pattern>/UsersServlet</url-pattern>
+  </servlet-mapping>
+  
+</web-app>
+
+
+

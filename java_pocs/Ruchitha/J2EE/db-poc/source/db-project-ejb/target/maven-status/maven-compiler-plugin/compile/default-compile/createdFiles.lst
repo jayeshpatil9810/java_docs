@@ -1,0 +1,4 @@
+com\v2\model\User.class
+com\v2\ejb\EJBUserSessionBeanLocal.class
+com\v2\ejb\EJBUserSessionBean.class
+com\v2\ejb\EJBUserSessionBeanRemote.class

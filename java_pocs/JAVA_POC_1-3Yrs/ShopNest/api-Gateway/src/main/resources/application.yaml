@@ -1,0 +1,62 @@
+server:
+  port: 9095
+ 
+spring:
+  application:
+    name: api-Gateway
+# gateway config
+  cloud:
+    gateway:
+      routes:
+      - id: CART-MODULE
+        uri: lb://CART-MODULE
+        predicates:
+        - Path=/api/cart/**
+ 
+      - id: COUPONS-MODULE
+        uri: lb://COUPONS-MODULE
+        predicates:
+        - Path=/api/coupons/**
+ 
+      - id: PAYMENT-MODULE
+        uri: lb://PAYMENT-MODULE
+        predicates:
+        - Path=/api/paypal/**
+        
+      - id: PRODUCT-MODULE
+        uri: lb://PRODUCT-MODULE
+        predicates:
+        - Path=/api/product/**
+        
+      - id: USER-MODULE
+        uri: lb://USER-MODULE
+        predicates:
+        - Path=/api/users/**
+        
+      - id: WISHLIST-MODULE
+        uri: lb://WISHLIST-MODULE
+        predicates:
+        - Path=/api/wishlist/**
+ 
+# Eureka Config
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+
+# Okta Configuration
+
+okta:
+  oauth2:
+    issuer: https://dev-52786026.okta.com/oauth2/default
+    audience: api://default
+    client-id: 0oab12nv73lSfbnwy5d7
+    client-secret: U7LT6XEXRXwpJpVhpbdlEnTd5M-4gT6tEjTTDzv6cY1-2tWyAbFAAwqnVf90GFOz
+    scopes: internal, openid, offline_access, email, profile
+ 
+ 

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/eureka/pom.xml" />
+        <option value="$PROJECT_DIR$/api-Gateway/pom.xml" />
+        <option value="$PROJECT_DIR$/Cart Module/pom.xml" />
+        <option value="$PROJECT_DIR$/coupons_module/pom.xml" />
+        <option value="$PROJECT_DIR$/payment_module/pom.xml" />
+        <option value="$PROJECT_DIR$/product-module/pom.xml" />
+        <option value="$PROJECT_DIR$/User-module/pom.xml" />
+        <option value="$PROJECT_DIR$/wishlist_module/pom.xml" />
+      </list>
+    </option>
+    <option name="workspaceImportForciblyTurnedOn" value="true" />
+  </component>
+  <component name="ProjectRootManager" version="2" project-jdk-name="zulu-1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
+</project>

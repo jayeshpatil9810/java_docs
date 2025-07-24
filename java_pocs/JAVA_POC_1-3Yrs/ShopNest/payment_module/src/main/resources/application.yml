@@ -1,0 +1,57 @@
+# PayPal Configuration
+paypal:
+  clientId: ARDzgRcl2XqHcTYwBesVsiTK2yBypFIaGgr6WIpri7mhmsg-_GBv1nRzF39xpUEA6t1Ju7OnBa1_347t
+  clientSecret: EHOq0Ap0nITjKnx0DLYNqcebdNujC1wjMlW90iL5HvTZaFarUFmsB6IIt1TaMBP2xkcnRtnxKmd8uEdd
+  mode: sandbox
+# Spring Data Source Configuration  
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://dev-52786026.okta.com/oauth2/default
+      client:
+        registration:
+          my-internal-client:
+            provider: okta
+            authorization-grant-type: client_credentials
+            scope: internal
+            client-id: 0oab12nv73lSfbnwy5d7
+            client-secret: U7LT6XEXRXwpJpVhpbdlEnTd5M-4gT6tEjTTDzv6cY1-2tWyAbFAAwqnVf90GFOz
+        provider:
+          okta:
+            issuer-uri: https://dev-52786026.okta.com/oauth2/default
+
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/shopnest
+    username: root
+    password: Suvam@123
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+  application:
+      name: payment-module      
+        
+# Application URL Configuration                
+url: http://localhost:8080/api/paypal
+
+    
+# Eureka 
+eureka:
+   client:
+      serviceUrl:
+         defaultZone: http://localhost:8761/eureka
+      instance:
+      preferIpAddress: true
+
+# Okta Configuration
+okta:
+  oauth2:
+    issuer: https://dev-52786026.okta.com/oauth2/default
+    audience: api://default
+        

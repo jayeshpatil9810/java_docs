@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/Cart Module/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/User-module/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/api-Gateway/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/coupons_module/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/eureka/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/payment_module/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/product-module/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/wishlist_module/src/main/java" charset="UTF-8" />
+  </component>
+</project>

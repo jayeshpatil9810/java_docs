@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="user-shoppingcart-module" />
+        <module name="api-Gateway" />
+        <module name="ShoppingCart_Module" />
+        <module name="payment-module (1)" />
+        <module name="payment-module (2)" />
+        <module name="coupons_module" />
+        <module name="springboot-product" />
+        <module name="wishlist_module" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="payment-module" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="ShoppingCart_Module" options="-parameters" />
+      <module name="api-Gateway" options="-parameters" />
+      <module name="coupons_module" options="-parameters" />
+      <module name="payment-module" options="-parameters" />
+      <module name="payment-module (1)" options="-parameters" />
+      <module name="payment-module (2)" options="-parameters" />
+      <module name="springboot-product" options="-parameters" />
+      <module name="user-shoppingcart-module" options="-parameters" />
+      <module name="wishlist_module" options="-parameters" />
+    </option>
+  </component>
+</project>
