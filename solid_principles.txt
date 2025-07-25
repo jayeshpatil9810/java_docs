@@ -1,0 +1,670 @@
+SOLID DESIGN PRINCIPLES IN JAVA -----------
+S - single responsibility principle
+o - open and close principle
+L - Leskovs substitution principle
+I - Interface segregation principle
+D - dependency Inversion principle
+
+it helps to improve quality of the code by making it cleaner,more testable.
+
+1. single responsibility principle -
+   the single responsibility principle states that every java class must perform a single functionality.
+   implementation of multiple funtionalities in a single class mashup the code.
+   
+   example -
+   public void getLoanInterestInfo(String loanType){
+     if(loanType.equals("homeloan")){
+	   //so some job
+	 }
+	 if(loanType.equals("personalloan")){
+	   //do some job
+	 if(loanType.equals("car")){
+	   //do some job
+	   }
+	  }
+	 suppose in future they wants to add some more load facilities then need to change the whole implementation class again
+	 it does not follow the singel responsibility principle to achieve the sigle responsibility principle we should create the saperate class
+	 to perform the single functionality only.
+                                       	 
+	 examples - 
+	 public class BankService{
+	  public long deposit(long amount,String accountNo){
+	   //deposit amount
+	   return 0;
+	   }
+	   public long withDraw(long amount,String accountNo){
+	    //widraw amount
+		return 0;
+		}
+		
+	  public class PrintService{
+	   public void printPassbook(){
+	    //update transaction info in passbook
+		}
+		}
+		
+
+2. OPEN CLOSE PRINCIPLE ---
+   the open-closed principle states that according to new requiremnt the module should be open for extension but closed for modification.
+   
+   examples -
+   public class NotificationService{
+     public void sendOTP(String medium){
+	   if(medium.equals("email")){
+	    //write email related logic
+		//use java sender
+	   }
+	   if(medium.equals("mobile")){
+	    //write lofic using api
+	}
+	}
+	if we want to add the whatsapp related notification service but extend it not modication here follow for extension
+	not for modication this is called open closed principle. everyone can use your feature using just extend it.
+	
+	public interface NotificationService{
+	  public void sendOTP(String medium);
+	  public void sendTransactionReport(String medium);
+	  }
+	  
+	public class EmailNotificationService implements NotificationService{
+	  public void sendOTP(String medium){
+	    //write the api integrate with the email
+		}
+		public void sendTransactionReport(String medium){
+		//write logic integrate with email api
+		}
+		}
+		
+	public class WhatsAppNotificationService implements NotificationService{
+	  public void sendOTP(String medium){
+	    //logic to integrate whatspp api
+		}
+		}
+		
+
+3. Liskov Substitution Principle(LSP)
+   it applies to inheritance in such a way that the derived classes must be completely substitutable for theier base classes.
+   in other words , if class A is a subtype of class B,then we should be able to replace B with A without interrupting the behaviour of the program.
+   
+   example --
+   public abstract class SocialMedia{
+   
+     //support whatspp,facebook,instagram
+     public abstract void charWithFriend();
+	 
+	//facebook insta 
+	 public abstract void publishPost(Object post);
+	 
+	 public abstract void sendPhotosAndVideos();
+	 
+	 public abstract void groupVideoCall(String... users);
+	 }
+	 
+	 
+	 public class Facebook extends SocialMedia {
+	 
+	      //support whatspp,facebook,instagram
+     public abstract void charWithFriend(){
+	 }
+	 
+	//facebook insta 
+	 public abstract void publishPost(Object post){
+	 
+	 }
+	 public abstract void sendPhotosAndVideos(){
+	 }
+	 
+	 public abstract void groupVideoCall(String... users){
+	 }
+	}
+	
+	*public class Instagram extends SocialMedia{
+	   public abstract void charwithfriend(Object post){
+	 
+	 }
+	 public abstract void sendPhotosAndVideos(){
+	 }
+	 
+	 public abstract void groupVideoCall(String... users){   /// video group not supported in the instagram that means instagram class not 
+	                                                             substitute of the parent class called sociamedia.
+	 }
+	
+	to overcome this problem
+	
+	*public Interface SocialMedia{
+	 public  void chatWithFriend();
+	 public  void sendPhotosAndVideos();
+	 }
+	 
+	*public interface PostMediaManager{
+	   public  void publishPost(Object post);
+	   }
+	*public interface SocialVideoCallManager{
+	  public void groupVideoCall(String... users);
+	  }
+	  
+	*public class Instagram implements SocialMedia , PostMediaManager{ //because this features is supported by the instagram
+	   public void publishPost(Object post){
+	 
+	   }
+	   public void charWithFriend(){
+	   
+	   }
+	   public void sendPhotosAndVideos(){
+	   
+	   }
+	  
+	  
+	  
+4.Interface Segregation Principle(ISP)---------
+    this principle states that the larger interfaces split into smaller ones.because the implementation classes
+	use only the methods that are required.we should not force the client to use the methods that they do not want to use.
+	The goal of the interface  segregation principle is similar to the single responsibility principle lets understand the principle
+	through an example.
+	
+	Example --
+	public interface UPIPayments{
+	  public void payMoney();
+	  public void getScratchedCard();
+	  public void getCashBackAsCreditBalance();
+	  }
+	  
+	public class GooglePay implements UPIPayments{
+	 public void payMoney(){
+	 }
+	 public void getScratchedCard(){
+	 }
+	 public void getCashBackAsCreditBalance(){
+	 //this feature is there in gpay
+	 }
+	 }
+	 
+	 public interface CashBackManager{
+	   public void getCashBackAsCreditBalance();
+	   }
+	   
+	 *public class GooglePay implements UPIPayments,CashBackManager{
+	   public void payMoney(){
+	   }
+	   public void getScratchedCard(){
+	   }
+	   public void getCashBackAsCreditBalance(){
+	    //this features is there in gpay
+		}
+	 }
+	 
+5. Dependency Inversion Principle --(DIP)
+    this principle states that we must use abstraction(abstract classes and interfaces)
+	instead of concrete implementations.High level modules should not depend on the low-level module but both should depend on the abstraction.
+	
+	
+----------------------------------------------------------------------------------------------------------------------------------------------
+
+DESIGN PATTERNS ------
+1. SINGLETONE DESIGN PATTERN - 
+   within our application we need our object to be created only one time at that time we will create singletone object.
+   whole application we will create object at once and will that use same object in whole application and operations.
+   *for achive this pattern we have to create private constructor then no one would be able to create the object.but we should be able create the object once.
+   for this we have to static instance of that perticular class.and one static method we should be allowing to create the object.
+   
+   example - (this is example of lazysingleton for single threaded class)
+   public class LazySingleton implements Serializable{
+      private static LazySingleton instance=null;
+	  private LazySingleton(){
+	  }
+	  public static LazySingleton getInstance(){
+	    if(instance==null){
+		 instance=new LazySingleton();
+		 }
+		 return instance;
+		}
+		
+	EXAMPLE - (when working with multithreaded application then we can use EagerSingleton approach)
+	class EagerSingleton{
+	 private static final EagerSingleton instance = new EagerSingleton();
+	 private EagerSingleton(){
+	 }
+	 public static EagerSingleton getInstance(){
+	   return instance;
+	 }
+	 
+	 we can break singleton design pattern using Reflection that can use setAccesible method it can set constructor as public.
+	 
+2. FACTORY DESIGN PATTERN - 
+    
+	Design it base on parameters what type of objects we are going to create.
+	When the client code needs to create objects based on input parameters (e.g., a string or enum), but shouldn't be tightly coupled to the specific classes.
+
+    example-
+	1.public abstract class OperatingSystem {
+	  private String version;
+	  private String architecture;
+	  public String getVersion(){return version;}
+	  public void setVersion(String version){ this.version=version;}
+	  public String getArchitecture(){ return architecture;}
+	  public void setArchitecture(String architecture){this.architecture;}
+	  
+	  public OperatingSystem(String version,String architecture){
+	    this.version=version;
+		this.architecture=architecture;
+	 }
+	  public abstract void changeDir(String dir);
+	  public abstract void removeDir(String dir);
+	 }
+	 
+	2. public class LinuxOperatingSystem extends OperatingSystem {
+	   public LinuxOperatingSystem(String version, String architecture){ super(version,architecture);}
+	  
+	  public void changeDir(String dir){
+	   }
+	  public void removeDir(String dir){
+	  }
+	 }
+	 
+	 public class WindowsOperatingSystem extends OperatingSystem {
+	  public WindowsOperatingSystem(String version, String architecture){ super(version,architecture);}
+	  
+	  public void changeDir(String dir){
+	   }
+	  public void removeDir(String dir){
+	  }
+	 }
+	 
+	3. public class OperatingSystemFactory {
+	   private OperatingSystemFactory(){
+	  }
+       public static OperatingSystem getInstance(String type,String version,String architecture)
+       switch(type){
+       case "WINDOWS":
+         return new WindowsOperatingSystem(version,architecture);
+       case "LINUX":
+         return new LinuxOperatingSystem(version,architecture);
+       default:
+         throw new IllegalArgumentException("OS Not Supported");
+		}
+	   }
+	   
+	
+	-------------
+	Abstract factory design pattern -----------
+	the abstract factory design pattern is a creational design pattern that provides an interface for creating families of 
+	related or dependent objects without specifying their concrete classes.
+	
+	example -
+	public class Application {
+	  private Button button;
+	  private checkBox checkbox;
+	  
+	  public Application(UIFactory factory){
+	   button = factory.createButton();
+	   checkbox = factory.createCheckBox();
+	  }
+	  
+	public interface UIFactory {
+	 Button createButton();
+	 CheckBox createCheckBox();
+	}
+	
+	public interface Button{
+	 void paint();
+	}
+	
+	public interface CheckBox{
+	  void paint();
+	}
+	
+	public class WinUIFactory implements UIFactory {
+	  public Button createButton(){ return new WinButton();}
+	  public checkBox createCheckBox(){ return new WinCheckBox();}
+	  
+	public class MacUIFactory implements UIFactory {
+	  public Button createButton(){ return new MacButton();}
+	  public checkBox createCheckBox(){ return new MacCheckBox();}
+	}
+	
+	Note - IF I crate object of winUIfactory then i will get windowbutton and windowcheck box vice versa for Mac
+	
+	public class Main{
+	  public static void main(String[] args){
+	   Application application = new Application(new WinUIFactory());
+	   application.paint();
+	 }
+	 
+	 output- win button  
+	         win checkBox
+			 
+    ---------------------------------------------------------------
+	Builder Design pattern ---------------------------------------- (LOMBOK is best example of builder design pattern)
+	whenever we want to create object step by step it means complex objects we want to create step by step then we can use builder design pattern.
+	When you want to create an object with many optional or configurable parameters.
+	Think of ordering a customized pizza or a car — you choose the ingredients or features step by step, and then build the final item.
+	
+	example -
+	public class Burger{
+	 private String size;
+	 private boolean egg;
+	 private boolean extraCheese;
+	 private boolean mavonese;
+	 private boolean onion;
+	 
+	 private Berger(BurgerBuilder burgerBuilder){
+	     //initialize all fields and you can also add validations
+	 }
+	 public String getSize(){ return size;}
+	 public boolean isEgg(){ return egg;}
+	 
+	 gettrs//
+	 public String getSize(){ return size;}
+	 public boolean isEgg(){ return egg;}
+	 public boolean isExtracheese(){ return extraCheese;}
+	 public boolean isMavanese(){ return mavonese;}
+	 public boolean isOnion(){ return onion;}
+	 public boolean isLettuce(){ return lettuce;}
+	 
+	 //INNER MEHTHOD
+	 public static class BergerBuilder{
+	  private String size;
+	  private boolean egg;
+	  private boolean extraCheese;
+	  private boolean mavonese;
+	  private boolean onion;
+	  private boolean lettuce;
+	  public BurgerBuilder size(String size){
+	    this.size=size;
+		return this;
+	  public BurgerBuilder egg(boolean egg){
+	    this.egg=egg;
+	  public BurgerBuilder extraCheese(boolean extraCheese){
+	    this.extraCheese=extraCheese;
+	  public BurgerBuilder mavonese(boolean mavonese){
+	    this.mavonese=mavonese;
+	  public BurgerBuilder onion(boolean onion){
+	    this.onion=onion;
+	  public BurgerBuilder lettuce(boolean lettuce){
+	    this.lettuce=lettuce;
+	  public Burger build(){ return new Burger(this);}
+	}
+ }
+ 
+    public class Main{
+	  public static void main(String[] args){
+	    Burger burger= new Burger.BurgerBuilder()
+		              .mavonese(true).onion(false)
+					  .egg(false).extraCheese(true)
+					  .size("LARGE").build();  //build methos is use for build the object.
+					  
+					  
+		
+
+PROTOTYPE DESIGN PATTERN ---------
+    prototype is a creational design pattern in java that focuses on creating new objects by copying an existing object know as prototype.
+	
+    example ---
+	public abstract class vehicle implements Cloneable{
+	  private String engine;
+	  private String model;
+	  private Long price;
+	  
+	  private Vehicle(String engine, String model, long price) {
+	    this.engine=engine;
+		this.model=model;
+		this.price=price;
+		
+		public String getModel(){ return model;}
+		public void SetModel(String model){this.model=model;}
+		public long getPrice(){ return price;}
+		public long SetPrice(long price){ this.price=price;}
+		public String getEngine(){ return engine;}
+		public void SetEngine(String engine){ this.engine=engine;}
+		
+		protected Vehicle clone() throws CloneNotSupportedException{
+		  return(Vehicle) super.clone();
+		}
+	}
+	
+	public class TwoWheeler extends Vehicle{
+	  private boolean isElectric;
+	  
+	  public TwoWheelerVehicle(String engine,String model,long price, boolean isElectric)
+	  super(engine,model,price);
+	  this.isElectric=isElectric;
+	 }
+	}
+	
+	public class FourWheelerVehicle extends Vehicle{
+	  private boolean automatic ;
+	  private boolean isDiesel;
+	  
+	  public FourWheelerVehicle(String engine,String model, boolean automatic, boolean isDiesel)
+	    super(engine,model,price);
+		this.isDiesel=isDiesel;
+	}
+	
+	protected FourWheelerVehicle clone() throws CloneNotSupportedException{
+	  return (FourWheelerVehicle) super.clone();
+	}
+ }
+ 
+    public class VehicleRegistry {
+	  private static Map<String,Vehicle> mapVehicles = new HashMap<>();
+	  static {
+	    mapVehicles.put("TWO", new TwoWheelerVehicle("120","royal", 100000, false));
+		mapVehicles.put("FOUR",new FourWheelerVehicle("120","bmw",false,100000,))
+		
+		Vehicle getVehicle(String vehicle) throws CloneNotSupportedException
+		return mapVehicles.get(vehicle).clone();
+		
+
+---------------------------------------------------
+
+ADAPTER DESIGN PATTERN --(structural design pattern)
+   it means adapt the different types of objects and different type of implementation and interfaces.
+   allow two incompatible interfaces to work together.
+   
+   example --
+   public interface Item {
+    String getItemName();
+	String getPrice();
+	String getRestaurantName();
+	}
+	
+	public class SwiggyStore{
+	  List<Item> items= new ArrayList<>();
+	  public void oddItems(Item item){ items.odd(item);}
+	}
+	
+	public class FoodItem implements Item{
+	  public String getItemName(){ return null;}
+	  public String getPrice(){ return null;}
+	  public String getRestaurantName(){ return null;}
+	}
+	
+	public interface GroceryItem{
+	  String getName();
+	  String getPrice();
+	  String getStoreName();
+	 }
+	
+	public class GroceryItemAdapter implements Item{
+	  private GroceryItem item;
+	  public GroceryItemAdapter(GroceryItem item){this.item=item;}
+	  public String getItemName(){return item.getName();}
+	  public String getPrice(){return item.getPrice();}
+	  public String getRestaurantName(){return item.getStoreName();}
+	}
+	
+	public class main{
+	  public static void main(String args[]){
+	    SwiggyStore swiggystore = new SwiggyStore();
+		swiggystore.addItems(new FoodItem());
+		swiggystore.addItems(new FoodItem());
+		swiggystore.addItems(new GroceryItemAdapter(new GroceryProduct()));
+	}
+	
+-------------------------------------------------
+
+    BRIDGE DESIGN PATTERM(structural design pattern)
+	it is help us to create structure forver different classes.
+	whenever we are working on huge classes and huge subset of classes and at that time we want to devide into saperate hierarchies for the abstraction and the implementation.
+	then we can use the bridge design pattern.
+	example -------
+	public abstract class Video{
+	  protected VideoProcessor processor{
+	  public Video(VideoProcessor processor){ this.processor=processor;}
+	  public abstract void play(String videoFile);
+	}
+	
+	public interface VideoProcessor{
+	  void process(String videoFile);
+	}
+	
+	
+	public class NetFlixVideo extends Video{
+	 public NetFlixVideo(VideoProcessor processor){ super(processor);}
+	 public void play(String videoFile){
+	   processor.process(videoFile);
+	  }
+	}
+	
+	public class Youtubevideo extends Video{
+	  public Youtubevideo(VideoProcessor processor){ super(processor);
+	  public void play(String videoFile){
+	    processor.process(videoFile); //process as per given processes
+	}
+	}
+	
+	public interface VideoProcessor{
+	  void process(String videoFile);
+	}
+	
+	public class HDProcessor implements VideoProcessor{
+	  public void process(String videoFile){
+	  }
+	 }
+	 
+	public class UHD4Processor implements VideoProcessor{
+	  public void process(String videoFile){
+	  
+	  }
+	}
+	public class Main{
+	  public static void main(String args[]){
+	    Video youtubeVideo = new Youtubevideo(new HDProcessor());
+		youtubeVideo.play("abc.mp4);
+		Video netflixVideo = new NetFlixVideo(new UHD4Processor());
+		netflixVideo.play("abc.mp4");
+	   }
+	}
+--------------------------------------------------
+    
+	DECORATOR DESIGN PATTERN --(structural design pattern)
+	The Decorator Design Pattern is a structural design pattern that allows behavior to be added to an individual object 
+	dynamically without affecting the behavior of other objects from the same class.
+	
+	example  --- 
+	public interface Pizza{
+	  public String bake();
+	}
+	
+	public class BasePizza implements Pizza{
+	  public String bake(){ return "Base Pizza";}
+	}
+	
+	public abstract class PizzaDecorator implements Pizza{
+	  protected Pizza pizza;
+	  public PizzaDecorator(Pizza pizza){ this.pizza=pizza;}
+	  public String bake(){ return pizza.bake();}
+	}
+	
+	public class JalepanoDecorator extends PizzaDecorator{
+	  public JalepanoDecorator(Pizza pizza){ super(pizza);}
+	  public String bake() return pizza.bake()+addJalepano();}
+	  public String addJalepano(){ return "jalepeno";}
+	}
+	
+	public class cheeseBurstDecorator extends PizzaDecorator {
+	  public CheeseBurstDecorator(Pizza pizza){ super(pizza);}
+	  public String bake(){ return pizza.bake()+addcheeze();}
+	  public String addCheese(){ return "Cheese";}
+	}
+	
+	public class Main{
+	  public static void main(String args[]){
+	    Pizza pizza=new JalepanoDecorator(new CheeseBurstDecorator(new BasePizza()));
+		Sysout(pizza.bake());
+	 }
+	}
+	
+	output--------> Base PizzaCheesejalpeno
+	
+--------------------------------------------------------------------
+
+    FACADE DESIGN PATTERN (structural design pattern)
+	when we are working with any third party application and libraries but sometime library is huge and complicated but suppose 
+	we need a some part of that library instead of that use entire library we can use only what we want in the class that class is called helper class that class will help to use that perticular library.
+	
+	example - consider example of place oder in the zomato and you want order.
+	1.customer seems menu and place order
+	2.restaurant got this order and prepare order
+	3.delivery team assigns delivery person
+	4.delivery boy picks up order and deliver.
+	
+	here zomato api is facade for us where we just clicked place order
+	after placing order you have to call restaurant to prepare order.
+	
+	public class Restaurant{
+	  public void prepareOrder(){
+	    }
+	}
+	
+	public class DeliveryTeam{
+	   public void assignDeliveryBoy(){
+	     
+	  }
+	}
+	
+	public class DeliveryBoy{
+	  public void pickUpOrder(){
+	  }
+	  public void deliveryOrder(){
+	  }
+	 }
+	 
+	public class ZomatoFacade{
+	  private Restaurant restaurant;
+	  private DeliveryBoy deliveryBoy;
+	  private DeliveryTeam deliveryTeam;
+	  
+	  public void placeOrder(){
+	    restaurant.prepareOrder();
+		deliveryTeam.assignDeliveryBoy();
+		deliveryBoy.pickUpOrder();
+		deliveryBoy.deliveryOrder();
+	   }
+	}
+	
+	
+	
+	
+
+
+	
+	  
+	
+  
+ 
+	
+	
+    
+    
+	 
+	 
+	 
+
+
+		
+	
+	  
+	  
+    
+   
