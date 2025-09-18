@@ -1,0 +1,67 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=
+
+"http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>v2-poc</groupId>
+    <artifactId>com.v2.poc</artifactId>
+    <version>7.4.0.GA</version>
+    <packaging>pom</packaging>
+   
+     <name>Database-EAR-Project</name>
+     <url>http://www.example.com</url>
+     
+    
+    <modules>
+        <module>v2-poc-ejb</module>
+        <module>v2-poc-web</module>
+        <module>v2-poc-ear</module>
+    </modules>
+    
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+
+
+    <build>
+        <finalName>${project.parent.artifactId}}</finalName>
+        <plugins>
+            <!-- EAR plug-in -->     
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-ear-plugin</artifactId>
+                
+                <!-- configuring the EAR plug-in -->
+                <configuration>
+                    <version>7</version>
+                    <defaultLibBundleDir>lib</defaultLibBundleDir>
+
+                    <modules>
+                        <webModule>
+                            <groupId>v2-poc</groupId>
+                            <artifactId>v2-poc-web</artifactId>
+                            <contextRoot>/v2-poc-web</contextRoot>
+                        </webModule>
+                    </modules>
+                    <outputFileNameMapping>@{artifactId}@@{dashClassifier?}@.@{extension}@</outputFileNameMapping>
+                </configuration>
+            </plugin>
+
+            <!-- WildFly plug-in to deploy EAR -->
+                    
+            <plugin>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-maven-plugin</artifactId>
+                <configuration>
+                    <skip>false</skip>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+</project>

@@ -1,0 +1,131 @@
+{
+	"info": {
+		"_postman_id": "788920c5-c170-4090-9e7b-86090a0f0e6d",
+		"name": "DepartmentService",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "31229961"
+	},
+	"item": [
+		{
+			"name": "AddDepartment",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"departmentName\":\"V2Solutions\",\r\n    \"departmentDescription\":\"It is a IT company\",\r\n    \"departmentCode\":\"V2001\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9191/api/departments/add",
+					"host": [
+						"localhost"
+					],
+					"port": "9191",
+					"path": [
+						"api",
+						"departments",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetDepartmentByCode",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:9191/api/departments/getbycode/V2001",
+					"host": [
+						"localhost"
+					],
+					"port": "9191",
+					"path": [
+						"api",
+						"departments",
+						"getbycode",
+						"V2001"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAllDepartment",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:9191/api/departments/getall",
+					"host": [
+						"localhost"
+					],
+					"port": "9191",
+					"path": [
+						"api",
+						"departments",
+						"getall"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateDepartment",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"departmentName\":\"V2Solutions\",\r\n    \"departmentDescription\":\"It is a software company\",\r\n    \"departmentCode\":\"V2001\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9191/api/departments/update/V2001",
+					"host": [
+						"localhost"
+					],
+					"port": "9191",
+					"path": [
+						"api",
+						"departments",
+						"update",
+						"V2001"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteDepartment",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:9191/api/departments/delete/V2001",
+					"host": [
+						"localhost"
+					],
+					"port": "9191",
+					"path": [
+						"api",
+						"departments",
+						"delete",
+						"V2001"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

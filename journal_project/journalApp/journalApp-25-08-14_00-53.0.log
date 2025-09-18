@@ -1,0 +1,1 @@
+25-08-14 00:53:34:337 [SpringApplicationShutdownHook] INFO  org.mongodb.driver.connection - Opened connection [connectionId{localValue:601, serverValue:32186}] to ac-0rtaqwp-shard-00-02.dppopie.mongodb.net:27017

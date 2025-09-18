@@ -1,0 +1,39 @@
+localhost:9191/api/employee/getall
+
+localhost:9191/api/employee/getbyid/5
+
+localhost:9191/api/employee/delete/5
+ 
+localhost:9191/api/employee/update/4
+
+{
+
+    "firstName" : "",
+
+    "lastName" : "",
+
+    "email" :"",
+
+    "departmentCode" : "DE001",
+
+    "organizationCode" :"V2001"
+
+}
+ 
+localhost:9191/api/employee/getall
+ 
+localhost:9191/api/employee/add
+
+{
+
+    "firstName" : "",
+
+    "lastName" : "",
+
+    "email" :"",
+
+    "departmentCode" : "DE001",
+
+    "organizationCode" :"V2001"
+
+}

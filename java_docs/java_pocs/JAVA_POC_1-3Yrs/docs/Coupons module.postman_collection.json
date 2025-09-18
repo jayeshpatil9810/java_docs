@@ -1,0 +1,109 @@
+{
+	"info": {
+		"_postman_id": "c4e64b1a-446a-4a11-8c9e-74d5cae0f3f5",
+		"name": "Coupons module",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29445906"
+	},
+	"item": [
+		{
+			"name": "Create Coupon",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"couponCode\":\"ABCH2B\",\r\n    \"discount\":\"15\",\r\n    \"userId\":\"111\",\r\n    \"isUsed\":\"false\",\r\n    \"validTill\":\"2023-11-30T23:59:59.411\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8081/api/coupons/createcoupon",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"coupons",
+						"createcoupon"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "validate",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "apply",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/api/coupons/apply?couponCode=ZXCV8B&totalAmount=1000",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"coupons",
+						"apply"
+					],
+					"query": [
+						{
+							"key": "couponCode",
+							"value": "ZXCV8B"
+						},
+						{
+							"key": "totalAmount",
+							"value": "1000"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update coupon",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "true",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/coupons/update/ABCH1A",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"coupons",
+						"update",
+						"ABCH1A"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

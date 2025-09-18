@@ -1,0 +1,31 @@
+localhost:9191/api/departments/getall
+
+localhost:9191/api/departments/getbycode/DE009
+
+localhost:9191/api/departments/delete/DE009
+ 
+localhost:9191/api/departments/update/DE001
+
+{
+
+    "departmentName" :"Digital Engineering",
+
+    "departmentDescription" : "It handles digital engineering department",
+
+    "departmentCode" : "DE009"
+
+}
+ 
+localhost:9191/api/departments/getall
+ 
+localhost:9191/api/departments/add
+
+{
+
+    "departmentName" :"Digital Engineering",
+
+    "departmentDescription" : "It handles digital engineering department",
+
+    "departmentCode" : "DE009"
+
+}

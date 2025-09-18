@@ -1,0 +1,31 @@
+localhost:9191/api/organization/getall
+
+localhost:9191/api/organization/getbycode/TT00
+
+localhost:9191/api/organization/delete/TT00
+ 
+localhost:9191/api/organization/update/TT00
+
+{
+
+    "organizationName" : "TripTok",
+
+    "organizationDescription": "It is a travel guide compnay",
+
+    "organizationCode" :"TT00"
+
+}
+ 
+localhost:9191/api/organization/getall
+ 
+localhost:9191/api/organization/add
+
+{
+
+    "organizationName" : "TripTok",
+
+    "organizationDescription": "It is a travel guide compnay",
+
+    "organizationCode" :"TT00"
+
+}

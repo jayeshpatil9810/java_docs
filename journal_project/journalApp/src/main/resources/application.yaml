@@ -1,0 +1,26 @@
+spring:
+  profiles:
+    active: dev
+
+logging:
+  level:
+    net:
+      engineering digest:
+        journalApp: DEBUG
+
+weather:
+  api:
+    key: fd761272d503239ddf6c23be5bde0868
+
+
+
+
+
+# this part we can use if want to stop the logs of any perticular file in the console.
+#logging:
+#  level:
+#    net:
+#      engineeringdigest:
+#        journalApp:
+#          service:
+#            UserService: OFF

@@ -1,0 +1,85 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>v2-poc</groupId>
+		<artifactId>com.v2.poc</artifactId>
+		<version>7.4.0.GA</version>
+	</parent>
+
+	<artifactId>v2-poc-ear</artifactId>
+	<packaging>ear</packaging>
+	
+	      <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+<!-- 
+<modules>
+	<module>ejb</module>
+	<module>web</module>
+	<module>ear</module>
+</modules>
+-->
+
+	<dependencies>
+		<!-- Define the version of the EJB jar so that we don't need
+                to repeat ourselves in every module -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>v2-poc-ejb</artifactId>
+			<version>7.4.0.GA</version>
+			<type>ejb</type>
+		</dependency>
+
+		<!-- Define the version of the WAR so that we don't need to repeat
+                ourselves in every module -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>v2-poc-web</artifactId>
+			<version>7.4.0.GA</version>
+			<type>war</type>
+		</dependency>
+	</dependencies>
+
+
+    <build>
+
+        <finalName>${project.parent.artifactId}</finalName>
+        <plugins>
+            <!-- EAR plug-in -->
+<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-ear-plugin</artifactId>
+               
+                <!-- configuring the EAR plug-in -->
+                <configuration>
+                    <!-- Tell Maven we are using Jakarta EE -->
+                    <version>7</version>
+                    <!-- Use Jakarta EE ear libraries as needed. Jakarta EE ear libraries
+                        are in easy way to package any libraries needed in the ear, and automatically
+                        have any modules (EJB-JARs and WARs) use them -->
+                    <defaultLibBundleDir>lib</defaultLibBundleDir>
+                    <modules>
+                        <!-- Default context root of the web app is /ejb-in-ear-web.
+                        If a custom context root is needed, uncomment the following snippet to
+                        register our War as a web module and set the contextRoot property -->
+                        <webModule>
+                            <groupId>${project.groupId}</groupId>
+                            <artifactId>v2-poc-web</artifactId>
+                            <contextRoot>/v2-poc-web</contextRoot>
+                        </webModule>
+                    </modules>
+                  
+                    <outputFileNameMapping>@{artifactId}@@{dashClassifier?}@.@{extension}@</outputFileNameMapping>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+

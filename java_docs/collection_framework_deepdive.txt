@@ -1,0 +1,872 @@
+WHAT IS COLLECTION FRAMEWORK - (java.util package)  *** the parent of collection is Iterable interface-----------------------------
+ it provides a set of interfaces and classes that help in managing group of objects.
+ 
+BEFORE NO COLLECTION - each class has a different way of managing collections leading to confusion and steep learning curve.
+these classes were not designed to work together seamlessly.
+
+collection can be easily interchanged and manipulated in a uniform way.
+
+INTERFACES ----
+collection - the root interface for all the other collection types.
+List - an ordered collection that can contain duplicate elements (e.g ArrayList,LinkedList)
+Set - A collection that cannot contain duplicate elements(e.g HashSet,TreeSet)
+Queue - a collection designed for holding elements prior to processing(e.g PriorityQueue, LinkedList when used as a queue)
+Dequeue - a double-ended that allows insertion and removal from both ends(e.g ArrayDequeue)
+Map - An interface that represents a collection of key-value pairs(e.g HashMap,TreeMap).
+
+COLLECTION Hierarchy - the collection framework is organized into a hierarchy where the core interfaces are at the top and the specific implementations
+                       extend these interfaces.
+					   
+LIST INTERFACE - the list in java is a part of the java.util package and is a sub-interface of the collection interface.it provides a way 
+            to store an ordered collection of elements (knows as sequence) list allow for precise control over where elements are inserted and can contain duplicate elements.
+	        the list interface is implemented by saveral classes in the java collection framework such as ArrayList,LinkedList,Vector,and stack.
+	
+	*KEY FEATURES OF LIST INTERFACE - 
+	    order preservation
+		index base access 
+		allow duplicates
+	1.ArrayList - an arraylist is a resizable array implementation of the list interface.unlike arrays in java,which have a fixed size an arraylist can change
+	              its size dyanamically as elements are added or removed. this flexibility makes it a popular choice when the number of elements in a list isnt known in advance.
+				  
+	        public class Main{
+			  public static void main(String args[]){
+			    ArrayList<Integer> list = new ArrayList<>();
+				list.add(1); //0
+				list.add(12); //1
+				list.add(23); //2
+				System.out.println(list.get(2));
+				System.out.println(list.size());
+				for(int i=0;i<list.size();i++){
+				   System.out.println(list.get(i));
+				}
+				
+				foreach//
+				for(int x:list){
+				  System.out.println(x);
+				}
+				
+				System.out.println(list.contains(12)) //will return true
+				System.out.println(list.contains(100)); //will return false
+				
+				//to add element on perticular index
+				list.add(2,50);
+				now the arraylist is [1,12,50,23]
+				
+				//set method
+				list.add(2,11) //it will replace 11 with 50 now the list will [1,12,11,23]
+				
+				*INTERNAL WORKING OF ARRAYLIST - (capacity of arraylit is 10 internally structure wise)
+				unlike a regular array,which has a fixed size,an arraylist can grow and shrink as elements are added or removed. this dyanamic resizing is achived 
+				by creating a new array when the current array is full and copying the elements to the new array.
+				
+				List<String> list1 = Arrays.asList("monday","tuesday");
+				System.out.println(list1.getClass().getName());
+				list1.add("wednesday") // this line will throw error in the List when we used asList then we can not add and remove the element
+				//we can replace the element
+				list1.set(1,"wednesday");
+				System.out.println(list1.get(1));
+				output-----------> wednesday
+				
+				List<Integer> list3 = List.of(1,2,3,4) // here we can not add,remove even we can not replace the element it is fixed.
+				
+				------
+				List<String> list4 = new ArrayList<>(list1);
+				list4.add("friday");
+				System.out.println(list4);  //here we can add element Create a new, modifiable list
+				output--------> [monday,tuesday,friday]
+				
+				
+				List<Integer> list = new ArrayList<>();
+				list.add(1);
+				list.add(2);
+				list.add(3);
+				list.add(index,number);  //here we can add the element on perticular index
+				List<Integer> list1 = List.of(4,5,6,7,8);
+				list.addAll(list1);  //addAll method will add all list in the arraylist output----> [1,2,3,4,5,6,7,8]
+				
+				Integer element = list.get(0); //get the element
+				
+				boolean existornot = list.contains(3); //it will return true and false on base on condition
+				
+				//CONVERTING TO Array---------------
+				String[] array = list.toArray(new String[0]); //here 0 because it will create new array and if the list is integer elements mentioned there new Integer[0].
+				
+				//SORTING List
+				Collections.sort(list);
+				
+				COMPARATOR FOR CUSTOM SORTING ------------>
+				
+				class StringLengthComparator implements Comparator<String>{
+				   @override
+				   public int compare(String o1,String o2){
+				      return o1.length() - o2.length();    //it means first will compare with second if condition positive then 02 comes after 01
+					 }
+					}
+				       
+				    class main{
+				    public static void main(String args[]){
+				    List<String> words = Arrays.asList("banana","apple","date");
+					words.sort(StringLengthComparator());
+					System.out.println(words);
+				}
+				
+				output ---> date
+			 
+				
+				
+				
+		*LinkedList ------------------>implementation class
+		        the linkedlist class in java is a part of the collection framework and implements the list interface. unlike an arraylist, which uses a 
+				dyanamic array to store the elements, a linkedlist store its elements as nodes in a a doubly linked list.this provides different performance 
+				characteristics and usage scenarios compared to Arraylist.
+				*a linkedlist is a linear data structure where each element is a saperate object called a node.each node contains two parts:
+				*data - the value store in the node
+				*pointers - two pointers one pointing to the next node (next) and the other pointing to the previous node(previous)
+				------performance considerations------------
+				linkedlist has different performance characteristics compared to arraylist
+				INSERTION AND DELETION - linkedlist is a better for fequent insertions and deletions in the middle of the list because it does not require shifting elements as in arraylist.
+				RANDOM ACCESS - LinkedList has slower random access (get(int index) compared to arraylist because it has to traverse the list from the beginning to reach the desired index.
+				MEMORY OVERHEAD - linkedlist requires more memory than arraylist because each node in a linked list requires extra memory to store references to the next and previous node.
+				
+				public class Test{
+				  public static void main(String args[]){
+				    LinkedList<Integer> linkedlist = new LinkedList<>();
+					linkedlist.add(1);
+					linkedlist.add(2);
+					linkedlist.add(3);
+					linkedlist.get(2); //0(n)
+					linkedlist.addLast(4); //0(1)
+					linkedlist.addFirst(0); //0(1)
+					linkedlist.getFirst();
+					linkedlist.getLast();
+					linkedlist.remove(index);
+					linkedlist.removeIf(x-> x%2==0); //this method uses predicate condition checking if condition matches as per deletion operation will performed.
+					}
+				}
+				
+		*VECTOR - 
+		    ----key features
+			dyanamic array - like arraylist vector is a dyanamic array that grows automatically when more elements are added than its current capacity.
+			syncronized - all the methods in vector are syncronized which makes it thread-safe this means multiple threads can work on a vector without the risk of currupting the data. however this can introduce performance overhead in single- threaded env.
+			randorm access - similar to arrays and arraylist vector allows random access to elements making it efficient for accessing elements using an index,
+			
+			CONSTRUCTOR OF VECTOR - 
+			vector - create a vector with an initial capacity of 10
+			vector int initialcapacity - creates a vector with a specified initial capacity.
+			METHODS IN VECTOR ---------
+			add
+			add(index,4)
+			get(index)
+			set(index,element)
+			remove(object o)
+			size()
+			isEmpty() -  it will check if vector is empty
+			contains(Object o) - check if vector contains the specified element.
+			clear() - removes all elements from the vector.
+			
+			SYNCRONIZATION AND PERFORMANCE - 
+			since vector methods are syncronized it ensures that only one thread can access the vector at a time. this makes it thread-safe.
+			examples --------
+			
+			ArrayList<Integer> list = new ArrayList<>();
+			Thread t1 = new Thread(()->{
+			  for(int i=0;i<1000;i++){
+			    list.add(i);
+			}
+			});
+			Thread t2= new Thread(()->{
+			  for(int i=0;i<1000;i++){
+			   list.add(i);
+			  }
+			});
+			t1.start();
+			t2.start();
+			try{
+			  t1.join();
+			  t2.join();
+			}catch(InterruptedException e){
+			  e.printStacktrace();
+			}
+			System.out.println("size of list"+ list.size());	
+			-----------output should be 2000 but it will print random 1421 if we run again it give somethig value not 2000 because arraylist is not syncronized
+			                  it means not thread-safe, both threads are accessing list. Instead of arraylist if we set Vector then we can get 2000 correct output because
+							  vector is provide thread safety.
+							  
+							  
+		*STACK - since stack extends vector it is syncronized make it thread-safe
+		    stack follows the last in first out(LIFO)principle where the last element added is the first one to be removed.
+			stack is subclass of vector which means it inherits all the features of dyanamic array but is constrained by the stacks LIFO nature.
+			
+			Stack<Integer> stack = new Stack<>();
+			stack.push(1);
+			stack.push(2);
+			stack.push(3);
+			stack.push(4);
+			stack.push(5);
+			System.out.println(stack);
+			Integer removeElement = stack.pop(); //it will remove the top element it means 5
+			System.out.println(stack);
+			Integer peek = stack.peek(); //peek method is for just to see the top element
+			System.out.println(peek);
+			System.out.println(stack.isEmpty());
+			System.out.println(stack.size());
+			NOTE -----------------> we can use the methods of vector because stack is extending vector class.
+			
+		*CopyOnwriteArrayListDemo ----------------------------------------------------------------------------------------------------------------------
+		    public static void main(String args[]){
+			  CopyOnwriteArrayListDemo<Integer> list = new CopyOnwriteArrayListDemo<>();
+			  //copy on write means that whenever a write operation
+			  //like adding or removing an element
+			  //instead of directly modifying the existing list
+			  //a new copy of the list is created and the modification is applied to that copy
+			  
+			  -----EXAMPLES -----
+			  
+			  List<String> shoppingList = new ArrayList<>();
+			  shoppingList.add("milk");
+			  shoppingList.add("eggs");
+			  shoppingList.add("bread");
+			  System.out.println("initial shoping list"+shoppingList);
+			  for(String item:shoppingList) {
+			      System.out.println(item);
+				  //try to modify the list while reading
+				  if(item.equals("eggs")){
+				     shoppingList.add("butter");
+					 System.out.println("added butter while reading");
+					}
+				}
+				System.out.println("updated shopping list"+shoppingList);
+                output ------------> error concurrent modification exception because arraylist can not modify after iteration.
+------------				
+			  * BUT IF WE USE CopyOnwriteArrayListDemo then it will work because we can read and write on same time, because reading is on snapshot and write have created another copy created by CopyOnwriteArrayListDemo
+			  List<String> shoppingList = new CopyOnwriteArrayListDemo<>();
+			  shoppingList.add("milk");
+			  shoppingList.add("eggs");
+			  shoppingList.add("bread");
+			  System.out.println("initial shoping list"+shoppingList);
+			  for(String item:shoppingList) {
+			      System.out.println(item);
+				  //try to modify the list while reading
+				  if(item.equals("eggs")){
+				     shoppingList.add("butter");
+					 System.out.println("added butter while reading");
+					}
+				}
+				System.out.println("updated shopping list"+shoppingList);
+				
+				
+			   EXAMPLE 2 -->
+			   List<String> sharedlist = new ArrayList<>();
+			   sharedlist.add("item1");
+			   sharedlist.add("item2");
+			   sharedlist.add("item3");
+			   Thread readerThread = new Thread(() -> {
+			      try{
+				    while(true){
+					  //iterate through list
+					  for(String item:sharedlist){
+					    System.out.println("Reading item:"+item);
+						Thread.sleep(100); //small delay to simulate work
+					  }
+					}
+				}catch(Exception e){
+				  System.out.println("exception in reader thread"+e);
+				  }
+				});
+				
+				Thread writerThread = new Thread(() ->{
+				  try{
+				   Thread.sleep(500); //delay to allow reading to start first
+				   sharedlist.add("Item4");
+				   System.out.println("added item4 to the list");
+				   
+				   Thread.sleep(500);
+				   sharedlist.remove("item1");
+				   System.out.println("remove item1 from the list");
+				}catch(InterruptedException e){
+				  e.printStacktrace();
+				}
+				});
+				readerThread.start();
+				writerThread.start();
+				
+				output ---------------------> will get error concurrentmodificationException 
+				because writer thread is trying to modified while reader thread is iterating over it.because arraylist is not supporting this but 
+				we can modified the class CopyOnwriteArrayListDemo where is arraylist then it will work perfectly.
+------------------------------------------------------------------------------------------------------------------------
+
+        *MAP ---> Map does not extend the collection interface (initial capacity is 16)
+		          Key Characteristics of the map Interface	
+				  key-value pairs - each entry in a map consists of a key and a value
+				  unique keys - no two entries can have the same key.
+				  one value per key - each key maps to a single value.
+				  order - some implementations maintain insertion order
+				  (LinkedHashMap), natural order(TreeMap), or no order(HashMap).
+				  
+				  HashMap<Integer,String> map = new HashMap<>();
+				  map.put(3,"shubham");
+				  map.put(1,"akshit");
+				  map.put(2,"neha");
+				  map.put(null,"jay1");
+				  map.put(null,"jay2"); //only one null key allow jay1 will replaced with jay2
+				  System.out.println(map); output --> {1:"akshit,3:shubham, 2:neha} because hashmap not preserved order we can not expected ordered what we have stored
+				  
+				  String student = map.get(3);
+				  System.out.println(student);
+				  String s = map.get(69) 
+				  System.out.println(s); //will return null because 69 is not present 
+				  
+				  System.out.println(map.containsKey(2)); //will return true
+				  System.out.println(map.containsValue("shubham"); //will return true
+				  
+				  //suppose we want loop (keySet method)  
+				  Set<Integer> keys = map.keySet(); //see the why the set here is set is also like a list just difference is duplicate now allow in set thats why here are using because duplicate key also now allow in hashmap.
+				  for(int i:keys){
+				    System.out.println(map.get(i));
+				  }
+				  
+				  //how to iterate hashmap
+				  for(Map.Entry<Integer,String> entry:map.entrySet()){
+				    System.out.println(entry.getKey()+": "+entry.getValue());
+				   }
+				  
+				  //entrySet
+				  Set<Map.Entry<Integer,String>> entries = map.entrySet();
+				  for(Map.Entry<Integer,String> entry:entries){
+				    System.out.println(entry.getKey()+":" +entry.getValue());
+				}
+				  //uppercase
+				  for(Map.Entry<Integer,String> entry:entries){
+				    entry.setValue(entry.getValue().toUppercase());
+					}
+					System.out.println(map);
+				  }
+				}
+				
+				------------KEY CHARACTERISTICS -----------------
+				unordered - does not maintain any order of its elements.
+				allows null keys and values - A map can have one null key and multiple null values. If we have a key 2 with value Neha and then insert a new entry with key 2 and value Jayesh, the value Neha will be replaced by Jayesh. Similarly, if the key is null and the value is m1, and we insert another entry with a null key and value m2, then m1 will be replaced by m2 because only one null key is allowed.
+				not syncronized - not thread-safe required external.
+				------------TIME COMPLEXITY-----------------
+				hashmap provides constant time O(1) performance for basic operations like put and get() assuming no collision
+				however if there are many collisions and many entries are stored in the same bucket,the performance can degree to O(n),where n is the number of element in that bucket.
+				But after java 8, if there are too many elements in a bucket hashmap switches to a balanced tree instead of a linked list to ensure better performance O(log n)
+				
+				public class HashCodeAndEqualMethod{  (hashmap works with custom objects by default objects hashcode() and equals() methods areused.
+				    public sttaic void main(String args[]){
+					  HashMap<Person,String> map = new HashMap<>()
+					  Person p1 = new Person("Alice",1);
+					  Person p2 = new Person("Bob",2);
+					  Person p3 = new Person("Alice",1);
+					  
+					  example of objects/////
+					  map.put(p1,"engineer"); //hashcode1 --> index1
+					  map.put(p2,"designer"); //hashcode2 --> index2
+					  map.put(p3,"manager");  //hashcode3 --> index3
+					  //but if we override hashcode and equals method then it will check content so then p1 and p3 equals -> it will replace
+					  //implementation looks like in class level below
+					  @override
+					  public boolean equals(Object obj){
+					    if(this==obj){
+						 return true;
+						}
+						if(obj==null){
+						 return false;
+						}
+						if(getClass()!=obj.getClass()){
+						 return false;
+						}
+						Person other = (Person) obj;
+						return id = other.getId()&&Objects.equals(name,other.getName());
+					
+					  
+					  
+					  second example///
+					  Map<String,Integer> map1 = new HashMap<>();
+					  map1.put("shubham",90); //hashcode index1
+					  map1.put("neha",92);    //hashcode2 index2
+					  map1.put("shubham",99); //hashcode1 -- index1 -- equals() -- replace
+					  
+					  
+				class Person{
+				  private String name;
+				  private int id;
+				  public Person(String name,int id){
+				    this.name=name;
+					this.id=id;
+				  //getters setters
+				  
+				  
+		
+		*LinkedHashMap --------------------------------->
+		
+		note ---> sortedMap and nevigablemap are interfaces which both implement the Treemap implementation class.-----------------------------
+		*SortedMap Interface - that extends map(implementation of sortedmap is treemap)
+		    sortedmap is an interface that extends map and guarantees that the entries are sorted based on the keys either in their natural orderring or by a specified comparator.
+			public class SortedMapDemo{
+			    public static void main(String[] args){
+				  SortedMap<Integer,String> map = new TreeMap<>();
+				  map.put(100,"nyara");
+				  map.put(88,"bob");
+				  map.put(99,"jack");
+				  map.put(null,"jayesh"); //will get error null pointer exception because internally sorted map trying to sort it thats why null not allow.
+				  System.out.println(map);
+				  output -----> {88=bob, 99=jack,100=nyara}  it will convert natural sorting order.
+				  
+				  map.get(88);
+				  map.containsKey(99);
+				  map.containsValue(100);
+				  
+				  System.out.println(map.firstKey());  it will return first key
+				  System.out.println(map.lastKey());   return last key
+				  System.out.println(map.headMap(91)); headmap will return suppose we pass 99 then it will give us 100 and 88 key value data
+				  System.out.println(map.tailMap(91));
+				  subMap(88,99) //we can specified from when to what we want data.
+				  
+				}
+			}
+			
+			    SortedMap<Integer,String> map = new TreeMap<>((a,b)->b-a);  //result will get descending order because we have use comparator
+				  map.put(100,"nyara");
+				  map.put(88,"bob");
+				  map.put(99,"jack");
+				  System.out.println(map);
+				  
+		NevigableMap(interface) ---> nevigablemap extends sortedmap providing more powerful navigation options such as finding the closest matching key or retriving the map 
+		                  in reverse order.
+						  examples -- 
+						  NevigableMap<Integer,String> nevigablemap = new TreeMap<>();
+						  nevigablemap.put(1,"one");
+						  nevigablemap.put(5,"five");
+						  nevigablemap.put(3,"three");
+						  Sysout(nevigablemap.lowerkey(4)); //it will return 3 key because it will return closest matching key
+						  Sysout(nevigablemap.descendingMap());
+						  
+		*Hashtable --> it is legacy class
+		              all methods in hashtable is syncronized thats why it is thread-safe but hashmap is not thread safe
+					  but in the hashtable get method also syncronized so all elements will lock thats why new class invent called concurrentHashMap.
+		
+		*concurrentSkipLismap(class) --> which is extends nevigablemap
+		            Maintains keys in natural order or by a custom comparator.
+					It uses a Skip List internally instead of a balanced tree, making it lock-free for reads and very efficient for concurrent operations.
+
+        *EnumMap (class) - this implements map interface(No hashing)
+		            enum means if want to store some constant values.
+					example --
+					Map<Day,String> map = new EnumMap<>(Day.class);
+					map.put(Day.TUESDAY,"gym");
+					map.put(Day.MONDAY,"walk");
+					System.out.println(map);
+				    }
+				}
+				enum Day{ 
+				    MONDAY,TUESDAY,WEDNESDAY,THURSDAY,FRIDAY,SATURDAY
+					}
+					output ---> first will print walk because in the enum monday is on first positon , enum maintains natural order of the constants.
+					
+		*ImmutableMap - we can not change.
+		        example - 
+				public class ImmutableHashDemo{
+				  public static void main(String[] args){
+				     Map<String,Integer> map1 = new HashMap<>();
+					 map1.put("A",1);
+					 map1.put("B",2);
+					 Map<String,Integer> map2 = Collections.unmodifiableMap(m1);
+					 System.out.println(m2);
+					 map2.put("c",3) //throws exception
+					 
+					 Map<String,Integer> mp3 = Map.of("shubham",98, "vivek",89); //Map.of method in java 9 version
+					 map3.put("akshit",88);
+					 Map<String,Integer> map4=Map.ofEntries(Map.entry("Akshit",99),Map.entry("vivek",99)
+					
+	****SET ---------------------------------------------------------------------------------------------------------------------------------
+	
+	        Set is a collection that cannot contain duplicate elements.
+			implementation classes - HashSet,LinkedHashset,TreeSet,EnumSet
+			Set<Integer> set = new HashSet<>();
+			set.add(12);
+			set.add(1);
+			set.add(1);
+			set.add(67);
+			System.out.println(set); //output [1,67,12] order not preserved in set. if we want to ordered the elements use linkedhashSet.
+			
+			Set<Integer> set = new LinkedHashset<>();
+			set.add(12);
+			set.add(1);
+			set.add(1);
+			set.add(67);
+			System.out.println(set); OUTPUT - [12,1,67]
+			
+			//if we want to output in sorted order use treeSet
+			Set<Integer> set = new TreeSet<>();
+			set.add(12);
+			set.add(1);
+			set.add(1);
+			set.add(67);
+			System.out.println(set); OUTPUT - [1,12,67]
+			
+			//for thread safety
+			Set<Integer> set1 = new ConcurrentSkipListSet<>();
+			--------------------------------------------------
+			Set<Integer> integers = Set.of(1,2,3,4,5,6,7,8,9); //using set.of we can add elements in the set.
+			
+			CopyOnwriteArraySet --------- (Because hashSet,treeSet,LinkedHashset not thread safe it means both thread will try to execution so it will chance to get the error concurrent exception
+			                               thats why recommended to use CopyOnwriteArraySet FOR thread-safety.
+										CopyOnWrite will use internal array and will generate new copy.
+			ConcurrentSkipListSet -------  when we are performing read and write executions on one time in thread.
+			
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    *QUEUE Interface ------ data structure that works on the FIFO(first in first out) (implementation class of queue interface is linkedlist and priorityqueue
+	              elements are added at the end remove from the end.
+				  
+				  public class QueueDemo{
+				    public static void main(String args[])
+					
+					Queue<Integer> queue1 = new LinkedList<>();
+					queue1.add(1);
+					System.out.println(queue1.size());
+					
+					System.out.println(queue1.remove()); //throws exception if empty
+					System.out.println(queue1.poll());
+					
+					System.out.println(queue1.element()); //throws exception if empty
+					System.out.println(queue1.peek()); //will return null if elemeents not in the queue otherwise if the elements in queue then will print top element
+					
+			*PriorityQueue---------
+			    public class PriorityQueueDemo{
+				  public static void main(String args[]){
+				    //part of the queue interface
+					//orders elements based on their natural ordering (for primitives lowest first)
+					//custom comparator for customized ordering
+					//does not allow null elements
+					PriorityQueue<Integer>	pq = new PriorityQueue<>();
+					pq.add(15);
+					pq.add(10);
+					pq.add(30);
+					pq.add(5);
+					System.out.println(pq); //not sorted output-- [5,10,30,15]
+					
+					while (!pq.isEmpty()) {
+                    System.out.println(pq.poll()); //poll() removes and returns the smallest element currently in the queue.  first will remove to 5
+					//priority queue use min heap internally natural orderring
+					
+			*Dequeue ---------
+			    //Double -ended queue
+				//allows insertion and removal of elements from both ends
+				//versatile than regular queues and stacks because they support all the the operations both.
+				
+				//INSERTION METHODS 
+				  addFirst
+				  addLast
+				  OfferFirst
+				  OfferLast
+				
+				//removal methods
+				  removeFirst
+				  removelast
+				  pollFirst
+				  pollLat
+				stack methods
+				push -- add element at first
+				pop  -- removes and returns the first element
+				
+				example --
+				Deque<Integer> deque1 = new ArrayDeque<>(); //faster iteration of  ArrayDeque then linkelist/low memory/no null allowed
+				//no need to shift elements,just shift head and tail
+				deque1.addFirst(10);
+				deque1.addLast(20);
+				deque1.OfferFirst(5);
+				deque1.OfferFirst(25);
+                output ---> 5,10,20,25
+				
+				deque1.pollLast(); //remove 25
+				
+				Note--
+				Deque<Integer> deque2 = new LinkedList<>(); //WE WILL use deque with linkedlist when insertion and deletion operations and insert elements on somewhere in middle.
+				
+				
+		*BlockingQueue(Interface) ---------->
+		    //thread-safe
+			//wait for queue to become non-empty 
+			//simplify concurrency problems like producer-consumer
+			//blocking queue
+			    //put -> block if the queue is full until space becomes available
+				//take -> blocks if the queue is empty until is an element becomes available
+				//offer -> waits for space to become available up to the specified timeout.
+				
+			example -->
+			class Producer implements Runnable{
+			  private BlockingQueue<Integer> queue;
+			  private int value=0;
+			  
+			  public Producer(BlockingQueue<Integer> queue{
+			    this queue=queue;
+			  
+			  @Override
+			  public void run(){
+			    while(true){
+				  try{
+				  System.out.println("Producer produced"+value);
+				  queue.put(value++);
+				  Thread.sleep(1000);
+				  }catch(Exception e){
+				   Thread.currentThread().interrupt();
+				   System.out.println("produce interrupted");
+				}
+				}
+				}
+			class Consumer implements Runnable{
+			    private BlockingQueue<Integer> queue;
+				public Consumer<BlockingQueue<Integer> queue){this.queue=queue;}
+				
+				@Override
+				public void run(){
+				 while(true){
+				 try{
+				 Integer value=queue.take();
+				 System.out.println("Consumer consumed"+value);
+				 Thread.sleep(2000);
+				 }catch(Exception e){
+				   Thread.currentThread().interrupt();
+				   System.out.println("consumer interrupted");
+				   }
+				  }
+				}
+				
+			public class BlockingQueueDemo{
+			   public static void main(String args[]){
+				BlockingQueue<Integer> queue = new ArrayBlockingQueue<>(5);  //ArrayBlockingQueue is implementation class of blockingQueue interface
+				   //bounded blocking queue backed by an aray means we have to mentioned capacity.
+				   //single lock, for both enqueu and dequeue
+				   //more threads problem(if we have less threads then we will use ArrayBlockingQueue otherwise we will use LinkedBlockingqueue for more threads.
+				Thread producer=new Thread(new Producer(queue));
+				Thread consumer = new Thread(new Consumer(queue));
+				producer.start();
+				consumer.start();
+				
+				BlockingQueue<Integer> queue = new LinkedBlockigQueue<>(); // for more threads
+				
+				BlockingQueue<String> queue2 = new PriorityBlockingQueue<>(); 
+				 //unbounded
+				 //binary heap as array and can grow dyanamically
+				 //heap is based on their natural ordering or a provided comparator like priority queue
+				 //put wont block
+				 
+				 queue2.add("apple");
+				 queue2.add("banana");
+				 queue2.add("cherry");
+				 System.out.println(queue2);
+				 
+				 
+				SYNCHRONOUS QUEUE ------- (WHEN producer produce the message then consumer will consume)
+				
+				public class SynchronousQueueDemo {
+                   public static void main(String[] args) {
+                   BlockingQueue<String> queue = new SynchronousQueue<>();
+                     Thread producer = new Thread(() -> {
+							try {
+								System.out.println("Producer is waiting to transfer...");
+								queue.put("Hello from producer!");
+								System.out.println("Producer has transferred the message.");
+							} catch (InterruptedException e) {
+								Thread.currentThread().interrupt();
+								System.err.println("Producer was interrupted.");
+							}
+							});
+							Thread consumer = new Thread(() -> {
+								try {
+									System.out.println("Consumer is waiting to receive...");
+									String message = queue.take();
+									System.out.println("Consumer received: " + message);
+								} catch (InterruptedException e) {
+									Thread.currentThread().interrupt();
+									System.err.println("Consumer was interrupted.");
+								}
+							});
+								producer.start();
+								consumer.start();
+
+							}
+									}
+								
+								
+			    DelayQueue ----------------------
+				      package com.engineeringdigest.collectionframework;
+					    import java.util.concurrent.BlockingQueue;
+						import java.util.concurrent.DelayQueue;
+						import java.util.concurrent.Delayed;
+						import java.util.concurrent.TimeUnit;
+
+						public class DelayQueueDemo {
+							public static void main(String[] args) throws InterruptedException {
+								// Thread-safe unbounded blocking queue
+								// Elements can only be taken from the queue when their delay has expired
+								// Useful for scheduling tasks to be executed after a certain delay
+								// internally priority queue
+								BlockingQueue<DelayedTask> delayQueue = new DelayQueue<>();
+								delayQueue.put(new DelayedTask("Task1", 5, TimeUnit.SECONDS));
+								delayQueue.put(new DelayedTask("Task2", 3, TimeUnit.SECONDS));
+								delayQueue.put(new DelayedTask("Task3", 10, TimeUnit.SECONDS));
+
+								while (!delayQueue.isEmpty()) {
+									DelayedTask task = delayQueue.take(); // Blocks until a task's delay has expired
+									System.out.println("Executed: " + task.getTaskName() + " at " + System.currentTimeMillis());
+								}
+							   }
+							 }
+
+							class DelayedTask implements Delayed {
+
+								private final String taskName;
+								private final long startTime;
+
+								public DelayedTask(String taskName, long delay, TimeUnit unit) {
+									this.taskName = taskName;
+									this.startTime = System.currentTimeMillis() + unit.toMillis(delay);
+								}
+
+								@Override
+								public long getDelay(TimeUnit unit) {
+									long remaining = startTime - System.currentTimeMillis();
+									return unit.convert(remaining, TimeUnit.MILLISECONDS);
+								}
+
+								@Override
+								public int compareTo(Delayed o) {
+									if (this.startTime < ((DelayedTask) o).startTime) {
+										return -1;
+									}
+									if (this.startTime > ((DelayedTask) o).startTime) {
+										return 1;
+									}
+									return 0;
+								}
+
+								public String getTaskName() {
+									return taskName;
+								}
+							}
+											
+											
+						output ------------------> task2,task1,task3 because task2 has less delay and then tas1 and task3
+						NOTE ---------> BlockingQueue implementation classes--(ArrayBlockingQueue,LinkedBlockigQueue,PriorityBlockingQueue,SynchronousQueue,DelayedQueue)
+						
+						use of blockingqueue is when threads need a coordinate with each other.
+						
+						
+						
+						**ConcurrentLinkedQueue ---
+						       implementation of queue interface that supports lock-free, thread-safe operations.
+							   in blocking queue we can not run put and take simultaniously but this scenario concurrentLinkedqueu we can run put and take method simultaiously.
+							   
+                                EXAMPLE ------------->
+
+								public class TaskSubmissionSystem {
+									private static ConcurrentLinkedQueue<String> taskQueue = new ConcurrentLinkedQueue<>();
+									public static void main(String[] args) {
+
+										Thread producer = new Thread(() -> {
+											while (true) {
+												try {
+													taskQueue.add("Task " + System.currentTimeMillis());
+												} catch (Exception e) {
+													e.printStackTrace();
+												}
+											}
+										});
+										Thread consumer = new Thread(() -> {
+											while (true) {
+												try {
+													String task = taskQueue.poll();
+													System.out.println("Processing: " + task);
+												} catch (Exception e) {
+													e.printStackTrace();
+												}
+											}
+										});
+										producer.start();
+										consumer.start();
+
+
+									}
+								}
+
+												
+												
+	
+    ***Interable Interfacae
+	        which has Iterator method.It represents a collection of objects that can be iterated using an iterator or the enhanced for-
+			example -- 1.
+			
+			ArrayList<Integer> list = new ArrayList<>();
+			for(int i:list){
+			    System.out.println(i);
+			}
+			Internal working of this for loop is using iterator below code
+			
+			Iterator<Integer> iterator= list.iterator();
+			while(iterator.hasNext()){       //hasNext method is next element is there then print next elements.
+			    System.out.println(iterator.next()); //it will return the elements
+				
+			   }
+			  }
+			}
+			
+			Example - 2.
+			
+			public class IteratorDemo{
+			    public static void main(String args[]){
+				   Interator<Integer> itr = numbers.iterator();
+				   while(itr.hasNext()){
+				     Integer number = itr.next();
+					 if(number%2==0){
+					 itr.remove();
+					}
+				   }
+				   
+				   System.out.println(number);
+				}
+		    }
+			using set method we can replaced the element like iterator.set();
+			
+			
+    	
+											  
+																
+										
+										
+										
+										
+										
+												
+												  
+												  
+													  
+													  
+										
+										
+										
+										  
+											  
+			
+				  
+				  
+				  
+					
+				
+			  
+			
+			
+			
+			
+				
+				
+				
+				 
+
+					   
+					   
+
+
+

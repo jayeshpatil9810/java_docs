@@ -1,0 +1,11 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://jayeshpatil1098:jayesh1234@journalcluster.dppopie.mongodb.net/journaldatabase?retryWrites=true&w=majority
+      datasource: journaldatabase
+      auto-index-creation: true
+
+server:
+  port: 8081
+  servlet:
+    context-path: /journal

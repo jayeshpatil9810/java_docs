@@ -1,0 +1,35 @@
+spring:
+  redis:
+    host: localhost
+    port: 6379
+
+
+  data:
+    mongodb:
+      uri: mongodb+srv://jayeshpatil1098:jayesh1234@journalcluster.dppopie.mongodb.net/journaldatabase?retryWrites=true&w=majority
+      datasource: journaldatabase
+      auto-index-creation: true
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: your-google-client-id
+            client-secret: your-google-client-secret
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: jayeshofficial1000@gmail.com
+    password: piki fvcq abol lfnu
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+#server:
+#  servlet:
+#    context-path: /journal
