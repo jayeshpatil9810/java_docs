@@ -1,0 +1,309 @@
+Types of Error -
+1.syntax error
+2.logical error
+3.Runtime error
+
+public class Demo {
+    public static void main(String[] args) {
+        
+        int[] numerators = {10,200,30,40};
+        int[] denominators={1,2,0,4};
+        for(int i=0;i<numerators.length;i++){
+            System.out.println(divide(numerators[i], denominators[i]));
+        }
+        System.out.println("good");
+    }
+    public static int divide(int a,int b){
+        return a/b;
+    }
+}
+
+program will crash on runtime. code will through exception. to how overcome this runtime error using Exception handling.
+because 30/0 will through exception.
+
+Exception handling ---
+  the exception handling is a way to handle the runtime errors so that the normal flow of the application can be maintained.
+  excpetion is an event that disrupts the normal flow of the program.it is an object which is thrown at runtime.
+  
+	  public class Demo {
+		public static void main(String[] args) {
+        
+        int[] numerators = {10,200,30,40};
+        int[] denominators={1,2,0,4};
+        for(int i=0;i<numerators.length;i++){
+            System.out.println(divide(numerators[i], denominators[i]));
+        }
+        System.out.println("good");
+    }
+		public static int divide(int a,int b){
+			try{
+			return a/b;
+		}catch(ArithmeticException e){
+			System.out.println(e);
+			return -1;
+		}
+      }
+    }
+	
+	output --
+	100
+	java.lang.ArithmeticException: / by zero
+	-1
+	10
+	good
+	
+	
+-----------------------------------------------------------------------------------------------------------
+public class Demo {
+    public static void main(String[] args) {
+        
+        int[] numerators = {10,200,30,40};
+        int[] denominators={1,2,0,4};
+        for(int i=0;i<numerators.length;i++){
+            System.out.println(divide(numerators[i], denominators[i]));
+        }
+        System.out.println("good");
+        }
+        public static int divide(int a,int b){
+           try{
+             Student s=null;
+             s.setId(123);
+             System.out.println(s.getId());
+              return a/b;
+                    
+             }catch(Exception e){
+               System.out.println(e);
+               return -1;
+             }catch(NullPointerException e){
+               System.out.println("null pointer exception");
+               return -1;
+             }catch(ArithmeticException e){
+               System.out.println("Arithmetic exception");
+               return -1;
+        }
+
+    }
+}
+this code will not work(unreachable) because first we have declaire parent exception called Exception and in the childs like NullPointerException and ArithmeticException.
+so all exception will handle Exception class then give error for childs. 
+this hierarchy will work but in the inheritance when in the parent and child class have same method name it mean override.
+
+Rule in Java:
+Always catch child exceptions before parent exceptions. Otherwise, the compiler will throw:
+Unreachable catch block for NullPointerException. It is already handled by the catch block for Exception.
+   
+
+-------------------------------------------------------------------------------------------------------------------------------------   
+public class Demo {
+    public static void main(String[] args) {
+        
+        int[] numerators = {10,200,30,40};
+        int[] denominators={1,2,0,4};
+        for(int i=0;i<numerators.length;i++){
+            System.out.println(divide(numerators[i], denominators[i]));
+        }
+        System.out.println("good");
+        }
+        public static int divide(int a,int b){
+           try{
+             Student s=null;
+             s.setId(123);
+             System.out.println(s.getId());
+              return a/b;
+                    
+             }catch(NullPointerException e){
+			   System.out.println("null pointer exception");
+               return -1;
+             }catch(ArithmeticException	e){
+               System.out.println("Arithmetic exception");
+               return -1;
+             }catch(Exception e){
+               System.out.println(e);
+               return -1;
+        }
+
+    }
+}
+this will work because suppose nullpointer exception is caught then it will goes to NullPointerException first if not then ArithmeticException if both not then Exception class.
+	
+IOException	 - checked exception java.lang.Exception
+├─ FileNotFoundException	
+├─ EOFException	
+├─ SocketException
+
+java.lang.RuntimeException--------------- unchecked exception
+NullPointerException	
+ArrayIndexOutOfBoundsException
+ArithmeticException	
+IllegalArgumentException
+
+**Throws and Throw Keyword ------
+ throws is used to declare that a method may throw an exception, and the responsibility to handle that exception is delegated to the calling method
+ example ---
+ 
+ public static void method1() throws FileNotFoundException{
+    FileReader filereader= new FileReader("a.text");
+  }
+  
+  
+**Throws - throw is used to manually throw an exception in Java. It is typically used when you want to forcefully signal that something went wrong in your code.
+	if (age < 18) {
+		throw new IllegalArgumentException("Age must be 18 or above.");
+	}
+	
+	
+Finally will always execute -- for cleanup activities.
+class General{
+  public static void main(String[] args){
+    System.out.println(divide(1,0));
+	}
+	public static int divide(int a,int b){
+	  try{
+	   a/b;
+	  catch(Exception e){
+	   return -1;
+	  }finally{
+	   System.out.println("bye");
+	  }
+	}
+	
+-----------------------------------------------------------------------------------------------------------------------------
+
+public class Test{
+  public static void main(String[] args){
+    BufferReader reader=null;
+	try{
+	  reader= new BufferReader(new FileReader("example.txt");
+	  String line;
+	  while((line=reader.readLine())!=null){
+	   System.out.println(line);
+	   }
+	 }catch(IOException e){
+	  System.out.println("IOException caught"+ e.getMessage());
+	 }finally{
+	  try{
+	   if(reader!=null){
+	   reader.close();
+	   }
+	 }catch(IOException e){
+	   System.out.println("error closing reader"+e.getMessage());
+	 }
+	}
+	
+//when we are trying to read this file need to close after that. using finally.
+
+
+	**try with resource is release in java 8
+	  no need finally automatically closed resources like FileReader,bufferedrrader,Connection etc.
+	  
+	  public class Tes{
+	   public static void main(String[] args){
+	    try(BufferReader reader=new BufferReader(new FileReader("example.txt");
+		String line;
+		while((line=reader.readLine())!null){
+		  System.out.println(line);
+		  }
+		}catch(IOException e){
+		  System.out.println("IOException caught"+e.getMessage());
+		 }
+		}
+	}
+	
+	
+----------------------------------------------------------------------------------------------------------
+Custom Exception  ---
+  class 1.
+  public class BankAccount{
+    private double amount;
+	public BankAccount(double amount){
+	 this.amount=amount;
+	}
+	public void withdraw(double amount)throws Exception{
+	 if(amount>balance){
+	 throw new InsufficientFundsException();
+	}
+	balance-=amount;
+	}
+ }
+  
+    class 2.  
+    public class Test{
+      public static void main(String[] args){
+      BankAccount bankacount = new BankAccount(10);
+      try{
+         bankacount.withdraw(11);
+       catch(Exception e){
+         System.out.println(e);
+    }
+	}
+	
+	class 3.
+	public class InsufficientFundsException extends Exception{
+	  public InsufficientFundsException(){
+	    super("what do you want you dont have money");
+		}
+	}
+		 
+
+------------------------------------------------------------------------------------------------------------------
+** COMBINATIONS ALLOW OR NOT WITH INHERITANCE - 
+   Overriding method in child class cannot throw broader or new checked exceptions.
+   
+   1.Child method throws same exception as parent(throws IOException → throws IOException	) //VALID
+   2.Child method throws subclass of parent’s exception(throws IOException → throws FileNotFoundException) //VALID
+   3.Child method throws no exception(hrows IOException → no throws)  //VALID
+   4.Child method throws broader checked exception(throws IOException → throws Exception) //NOT VALID
+   5.Parent method throws nothing, child throws checked( parent: no throws → child: throws IOException) //NOT VALID
+   6.Parent method throws nothing, child throws unchecked(parent: no throws → child: throws NullPointerException) //VALID
+   
+   1.
+   class Parent {
+    void show() throws IOException {}
+    }
+   class Child extends Parent {
+    void show() throws IOException {} // ✅ OK
+    }
+	
+   2.
+   class Parent {
+     void show() throws IOException {}
+   }
+   class Child extends Parent {
+    void show() throws FileNotFoundException {} // ✅ OK (FileNotFoundException ⊂ IOException)
+   }
+	
+   3.
+   class Parent {
+    void show() throws IOException {}
+   }
+   class Child extends Parent {
+    void show() throws Exception {} // ❌ Not allowed: Exception ⊃ IOException
+   }
+   
+   4.
+   class Parent {
+    void show() {} // no exception
+   }
+   class Child extends Parent {
+     void show() throws IOException {} // ❌ Not allowed
+   }
+   
+   5.class Parent {
+    void show() {}
+    }
+   class Child extends Parent {
+     void show() throws NullPointerException {} // ✅ Allowed (unchecked)
+   }
+
+   
+   
+	
+	
+   
+
+
+
+
+
+
+
