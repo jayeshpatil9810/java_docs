@@ -1,0 +1,4 @@
+(Observer design pattern)
+its a behavioural design pattern
+in this when subject changes the state all its dependent objects notified the changes 
+one to many relation

@@ -1,0 +1,2 @@
+the adapter design pattern in java is a structural design pattern that enables incompatible interfaces 
+to work together. it acts as a bridge between it acts bridge between two interfaces converting the interface of one class into another interface that clients expect.

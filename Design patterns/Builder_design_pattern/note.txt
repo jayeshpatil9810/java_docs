@@ -1,0 +1,5 @@
+while creating object when object contain may attributes there are many problems exist.
+1. we have to pass many arguments to create object
+2. some parameters might be optional
+3. factory class takes all responsibility for creating object, if the object is heavy then all complexity is the part of factory class.
+so builder pattern be create object step by step and finally return final object with desired values of attributes.

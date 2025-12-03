@@ -1,0 +1,6 @@
+when there is superclass and multiple subclasses and we get object of subclasses based on input and requirement.
+then we create factory class which takes the respobility of creating object of class based on input.
+
+advantages --
+focus on creating object for interface rather than implementation.
+loose coupling more robust code.
