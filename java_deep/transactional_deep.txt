@@ -1,0 +1,261 @@
+Ttransactional deep dive ----------- to maintain data consistency and maintain data integrity in our application
+
+multiple database operations in single method or in singel usecase(what happen if something goes wrong) one failure should not break the entire system that
+scenario transactional comes into the picture.
+
+suppose there is two tables 
+order and inventory 
+order fields(id, productId,Quantity,Amount) 101,1,2,50k
+inventory fields(productid,Name,price,stock)  1, laptop, 10
+
+suppose customer purchase the laptop and store entry in the order table but it should update in the inventory table as well. suppose i purchase 2 laptop in stock column there
+should update stock count is now 8, but if something errors are in the inventory database or database connection loss then inventory table will not update then order table 
+will store unuse data in this scenario we have to do the rollback data also be deleted from the order table. if everything good then commit.
+
+use @Transactional(onlyRead= false) if we are using read write and update operations 
+
+Isolation -- isolation controls how one transaction see the changes made by another transaction.
+
+----
+constant methods inside prapogation
+public enum Prapogation{
+   REQUIRED
+   SUPPORTS
+   MANDATORY
+   REQUIRED_NEW
+   NOT_SUPPORTED
+   NEVER
+   NESTED
+   
+   
+constant methods inside Isolation ---
+  READ_UNCOMMITED
+  READ_COMMITED
+  REPEATABLE_READ
+  SERIALIZABLE
+  
+  
+PRAPOGATION -----  (if any failure then rather than keep unused data just rollback everything it means prapogation)
+prapogation defines how the transactions are managed when method is invoked by another transaction.(if we are callling one transaction inside another transaction in this scenario prapogation is useful.
+example --- suppose we have two methods M1 AND M2 and both the methods implemented transactional suppose we are invoking M2 from M1.
+            and suppose m2 transaction is failed how we want m1 transaction is continued. --------------
+			1. @Transactional(prapogation = Prapogation.REQUIRED)
+			Propagation.REQUIRED means the method will join an existing active transaction if one exists; otherwise, Spring will create a new transaction.
+			All participating methods share the same transaction, so a failure in any method causes a rollback of the entire transaction.
+			
+			//by default spring data JPA use the transactional management.
+			application.properties 
+			//logging.level.org.springframework.transaction=DEBUG
+			//logging.level.org.springframework.transaction=DEBUG
+			//logging.level.org.springframework.orm.jpa.JpaTransactionManager=DEBUG
+			//here we can debug it is creating single transaction or not.
+			
+			2.@Transactional(prapogation = Prapogation.REQUIRED_NEW)
+			  always create new transaction, suspending if any existing transaction.
+			  
+			  *If transaction existing join it if not then create one
+			  *Commits or rolls back independently
+			  EXAMPLE ---------------------------------------------------------------------------
+              @Transactional
+			  public void placeOrder() {
+				saveOrder();          // Tx-1
+				saveAuditLog();       // Tx-2 (REQUIRES_NEW)
+				throw new RuntimeException("Order failed");
+			 }
+			  
+			  @Transactional(propagation = Propagation.REQUIRES_NEW)
+			  public void saveAuditLog() {
+				auditRepo.save(log);
+			 }
+			 
+			 save order will rollback
+			 saveAuditlog will commited (audit log stays even though order fails.
+			 
+			 UseCase of REQUIRED_NEW  ----- Even if business logic fails, I still want to log that failure.
+			 
+			3.@Transactional(propagation = Propagation.MANDATORY)
+			//require and existing transaction, if nothing found it will through exception.(Must run inside an existing transaction)
+			like we can run our method if any another existing transaction if no any transaction is found then we will get exception error.
+			
+			  EXAMPLE ---------- performing mandatory on validatePayment() method -----------------------
+			  
+			  public class OrderProcessingService {
+			  @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
+              public Order placeAnOrder(Order order) {
+              // get product inventory
+              Product product = inventoryHandler.getProduct(order.getProductId());
+			  // validate stock availability <(5)
+              validateStockAvailability(order, product);
+			  // update total price in order entity
+			  order.setTotalPrice(order.getQuantity() * product.getPrice());
+			  Order saveOrder = null;
+				try {
+					//save order
+					saveOrder = orderHandler.saveOrder(order);
+
+					//update stock in inventory
+					updateInventoryStock(order, product);
+					auditLogHandler.logAuditDetails(order, "order placement succeeded");
+				} catch (Exception ex) {
+					auditLogHandler.logAuditDetails(order, "order placement failed");
+				}
+				
+				//PaymentValidatorHandler.validatePayment(Order);
+				}
+			}
+			
+			@Transactional(prapogation = Prapogation.MANDATORY)  // it will use previous existing transaction which is in orderProcessingService.
+			public class PaymentValidatorHandler{
+			  public void validatePayment(Order order){
+			   //assume payment processing happens here
+			   boolean paymentSuccesful =false;
+			   //if payment is unsuccessful, we log the payment failure in the mandatory transaction
+			   if(!paymentSuccesful){
+			     AuditLog paymentfailureLog = new AuditLog();
+				 paymentfailureLog.setOderId(Long.valueOf(order.getId());
+				 paymentfailureLog.setAction("payment failed for order");
+				 paymentfailureLog.setTimestamp(Localdate.now());
+				 
+				 if(order.getTotalPrice()> 100){
+				  throw new RuntimeException("error in payment validator");
+				 
+				 //save  the payment failure
+				 auditLogRepository.save(paymentfailureLog);
+				 
+			NOTE --if any failure in paymenthandler class still order andupdate save as it is though OrderProcessingService
+			       
+		4. Transactional(prapogation.NEVER)
+		//ensure the method will run without transaction, throw an exception is any.
+		EXAMPLE ---------
+		suppose in the order service order is failed and inventory order is failed then we will reties machanism for 3 times then 3 times this sendOrderConfirmation() method will execute.
+		then this reties and sendOrderConfirmation should be completely define outside of transaction that scenario we have to decalired is NEVER.
+		
+			
+	    
+        5.Trsactional(prapogation.SUPPORTS)
+		    //supports if there is any active transaction, if not execute without transaction.
+			
+        5.Tractional(prapogation.NESTED)
+		   //execute within a nested transaction,allowing nested transaction to rollback independently if there is exception without impacting outer transaction.
+		   
+			 
+			 
+------------------------------------
+ISOLATION --
+   in transaction isolation controls the visibility changes made by one transaction into other transaction.
+   if there is two transaction T1 and T2 what T1 is doing it should update to T2 this is the roll of isolation to make the data consistency between multiple transaction.
+   THE isolation uses default REPEATABLE_READ that we can change.
+   
+   public enum Isolation{
+     DEFAULT,
+	 READ_UNCOMMITED,
+	 READ_COMMITED,
+	 REPEATABLE_READ,
+	 SERIALIZABLE);
+	 
+	1. READ_UNCOMMITED --  it means dirty read
+	suppose two transaction M1 and M2
+	there is table columns ID, NAME, PRICE, STOCK
+	M1 transaction is doing stock update and M2 is reading stock value of that same product.
+	suppose the stock value is 10 and M2 also reading 10 it means M2 is reading uncommited data ,suppose in future M1 is rollback the change suppose 20 but still M1 getting 10 it means data is not consistency between two transaction.
+	
+	then if we use trasaction level isolation read_uncommited,then what m1 is doing that uncommited value also read by M2.
+	EXAMPLE --------------
+	
+	public class ProductService{
+	  //Transactional A:
+	  @Transactional(isolation= Isolation.READ_UNCOMMITED)
+	  public void updateStock(int productId,int stock) throws InterruptedException{
+	    //retrive the product and update its stock
+		Product product= inventoryRepo.findById(productId);
+		 .orElsetThrow(()- > new RuntimeException("product not found");
+		product.setStockQuantity(stock);
+		inventoryRepo.save(product);
+		
+		//simmulate a long running transaction (does not commite yet)
+		System.out.println("Transactional A: stock updated to"+ stock);
+		Thread.sleep(5000);
+		System.out.println("Transactional A: commited the update"):
+		}
+		
+		
+		//Transactional B:Read stock
+		@Transactional(isolation= Isolation.READ_UNCOMMITED)
+		public int checkStock(int productId){
+		  //retrieve the product and read its stock (potentially dirty read)
+		  Product product= inventoryRepo.findById(productId)
+		           .orElseThrow(()-> new RuntimeException("product not found"));
+				System.out.println("Transactional B: Read stock as"+ product.getStockQuantity);
+				return product.getStockQuantity();
+			}
+	    }
+		
+		 public void testReadUncommitted(int id) throws InterruptedException {
+
+        // Start Transaction A (Thread 1) to update the stock but not commit, then roll back
+        Thread threadA = new Thread(() -> {
+            try {
+                productService.updateStock(id, 5);  // Change stock to 5
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+
+        // Start Transaction B (Thread 2) to read the stock
+        Thread threadB = new Thread(() -> {
+            try {
+                Thread.sleep(2000);  // Wait a moment to ensure Thread A starts and holds the transaction
+                int stock = productService.checkStock(id);  // Read stock during Transaction A
+                System.out.println("Stock read by Transaction B: " + stock);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        // Start the threads
+        threadA.start();
+        threadB.start();
+
+        // Wait for threads to complete
+        threadA.join();
+        threadB.join();
+			}
+		}
+		
+		
+		4.
+		//@Transactional(Isolation = isolation.READ_COMMITED)
+		//using this we can avoid dirty read.
+		
+		5.
+		//@Transactional(Isolation = isolation.REPEATABLE_READ)
+		//it ensure the transaction reads the same data multiple times it will see the same data throught the transaction, even if other transaction modified the data this way it will prevent the dirty read and non repeatable read.
+		
+		
+		6.
+		@Transactional(Isolation = isolation.SERIALIZABLE)
+		..ensure that transactions are executable in manner to running them sequantially one after another even they are executing concurrently.
+		Example -----
+		there are two transaction M1 and M2 
+		M1 is updating the value and M2 is reading the value once M1 is started at the same time if you star the M2 transaction even though both are executing concurrently it will apply the lock
+		serializable isolation apply the lock. first M1 should complete the task then get chance M2 transaction for execution there will be no concurrent execution. one after another.
+		“Isolation.SERIALIZABLE is the strictest isolation level.
+			It guarantees that concurrent transactions produce the same result as if they were executed sequentially.
+			The database enforces this using locks, so if one transaction is modifying data, other transactions accessing the same data will wait until it completes.”
+					
+					
+		
+		
+		
+		
+		
+				
+	
+	 
+	 
+
+			 
+							  
+			  
+			
+			

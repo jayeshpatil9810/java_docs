@@ -1,0 +1,119 @@
+Normalization -- database
+normalization is the process of designning a database effectively such that we can avoid data redundancy, now in this turn this will help
+us to avoid anomalies such as insertion deletion and updation anomalies.
+
+there is some normalforms like 1nf, 2nd NF, 3rd NF, 4rth NF 
+
+1NF Rule 1 -- every column / attribute need to have a single value.
+1NF Rule 2 -- Each row should be unique. Either through a single or multiple columns. Not mandatory to have primary key.
+
+
+2NF Role 1 -- Must be in 1NF
+2NF Role 2 -- All non key attributes must be fully dependent on cadidate key
+              i.e if a non-key column is partially dependent on candidate key(subset of columns forming candidate key) then split then into saperate tables.(non column key means which not part of the candidate key or primary key).
+2NF Role 3 -- after split the tables Every table should have primary key and relationship between the table should be formed using foreign key.
+
+			  explanation in table------
+			  
+			  StudentID   courseID     StudentName     CourseName     Marks
+			  101         C01          Jayesh          Java           90
+			  101         C02          Jayesh          Spring         85
+			  102         C01          Rahul           Java           88
+			  
+			  Primary key  = (StudentID, CourseId)
+			  (StudentID,CourseId) -- partial dependency
+			   StudentID --> StudentName NOT partial dependency 
+			   CourseID ---> CourseName  NOT partial dependency
+			   
+			-- if we want to retrive the StudentName we just need a StudentID we dont need of CourseId.
+			   thats why this is the partial dependency.
+			   
+			   thats why the point is every non attribute should completely depend on candidate key so the (every non attribute columns is --- StudentName, CourseName, Marks)
+			   
+			   so in the partial dependency having then we have to split the table.
+			   like example ---
+			   
+			   Student table
+			   StudentID    StudentName
+			   101          Jayesh
+			   102          Rahul
+			   
+			   
+			   Course Table 
+			   CourseId     CourseName
+			   C01          Java
+			   C02          Spring
+			   
+			   Enrollment Table
+			   StudentID    CourseId    Marks
+			   101          C01         90
+			   101          C02         85
+			   102          C01         88
+			   
+			   so now 
+			   primary key is courseID and StudentID
+			   marks is depend on composite key.
+			   so now there is no partial dependency anywhere.
+			   
+			   
+			   
+3rd NF-- (third normal form)
+    Rule 1 --> Must be in 2NF
+	Rule 2 --> avoid transitive dependencies
+	
+	transitive dependency  --
+	        lets say you have a table T which has 3 columns namely A,B and C.
+			IF A is funtionally dependent on B and B is funtionally dependent on C then we can say that A is functionally dependent on C.
+			
+		example with the table what is functionally dependent  --
+		ORDER_NUMBER     CUSTOMER_NAME      SALES_CONTACT_LASTNAME
+		column B         column A           column C
+		
+		so in this table if i aware of the customer name then i know the what are the order number customer have purchased. then A is functionally dependent on B.
+			   
+			   
+
+INSERT, UPDATE AND DELETE anomolies ---------------- if the database is not properly normalized then this issue will occur.
+example ------------>
+
+StudentId	StudentName	CourseId	CourseName	Instructor
+101	        Jay	         C1	        Java	    John
+101  	    Jay	         C2     	SQL	        Mike
+102	        Rahul    	 C1	        Java	    John
+Notice that:
+
+StudentName is repeated.
+CourseName is repeated.
+Instructor is repeated.
+
+This redundancy causes three problems.
+
+1. insert anomoly suppose a new course starts.
+   Suppose a new course starts:
+
+   CourseId	 CourseName	 Instructor
+   C3	     Kafka	     David
+   
+   but no student has enrolled yet. we can not insert this record in above table.Because the table also requires StudentId and StudentName. So you cannot insert course information independently.
+   This is called an Insert Anomaly.
+   
+1. update anomoly
+   StudentId	CourseId	Instructor
+   101	        C1	        John
+   102	        C1	        John
+   
+   suppose instructor john changes his name to john Smith.
+   we have to update both rows.
+   but after normalization we can do like ------------------
+   After Normalization
+   Course Table
+   CourseId (PK)	Instructor
+   C1	            John
+
+   Student_Course Table
+   StudentId	CourseId (FK)
+   101	        C1
+   102	        C1
+   
+
+   

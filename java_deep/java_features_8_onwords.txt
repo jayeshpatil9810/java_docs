@@ -1,0 +1,800 @@
+*Streams --
+streams are us for process the objects from collection.
+streams are an update to the java api that lets you manipulate collections of data in a declarative way (you express query rather than code an 
+hoc implementation for it. for now i can think of them as fancy iterators over a collection of data.
+in addition streams can be processed in parallel transperently without you having to write any multithreaded code.
+
+java 8 above code ex--
+List<String> lowercaloriesdishesh =
+   menu.stream()
+   .filter(d->d.getCalories() < 400)
+   .sorted(comparing(Dish::getCalories))
+   .map(Dish::getName)
+   .collect(toList());
+
+streams - 
+source - steeams consume from a data-providing source such as collections arrays or i/o resources.
+Note that genrating a stream from an ordered collection preserves the ordering the elements of a stream coming coming from list will have the same order as the list
+data processing operations - stream support databases like operations and common operations from functional programming languages to manipulate 
+                             data such as filter,map, reduce find match ,sort and so on.
+stream operations can executed can be executed either sequentially or in parallel
+pipelining - many stream operations return a stream themselves, allowing operations to be chaining and form a larger pipeline, this enables certain
+             optimizations,such as laziness and short-cuicuiting. a pipeline of operations can be viewed as a database like query on the data source.
+internal iteration - in contrast to collections, which are iterated explicitly using an iterator ,stream operations do the iteration behind the schene for you.
+
+streams external vs internal iteration--
+List<String> names=new ArrayList<>();
+Iterator<String> iterator= menu.iterator();
+while(iterator.hasNext()){
+   Dish h =iterator.next();
+   names.add(d.getName());
+}
+
+Above java 8
+List<String> names=menu.stream()
+             .map(Dish::getName)
+			 .collect(toList());
+			
+streams - Traversable only once -- similarly to iterators a stream can be traversed only once.after that a stream 
+                                   is said 	to be consumed.you can get a new stream from the initial data source to traverse it again just like for an Iterator
+	    List<String> title=Arrays.asList("java8","In","Action");
+		stream<String> s=title.stream();
+		s.forEach(System.out::println);
+		s.forEach(System.out::println); --- error elegal statement exception because it is only once iteration
+		
+Streams - Filtering,Slicing
+*the streams interface supports a filter method.this operation takes as argument a predicate(a function returning a boolean)and 
+ return a stream including all elements that match the predicate.
+ List<Dish> vegeterianMenu=menu.stream().filter(Dish::isVegeterian)
+                                        .collect(toList());
+								
+*Filtering unique elements --
+ List<Integer> numbers=Arrays.asList(1,2,2,3,4,3,5)
+ numbers.stream()
+ .filter(i-> i%2==0)
+ .distinct()
+ .forEach(System.out::println);
+ 
+*Truncating a stream -  streams support the limit(n) method,which return another stream that no longer than a given size,
+                        longer than a given size.the requested size is passed as argument to limit
+						List<Dish> dishes=menu.stream()
+						 .filter(d->d.getCalories()>300)
+						 .limit(3)
+						 .collect(toList());
+						 
+			skipping the elements example -
+			List<Dish> dishes=menu.stream()
+			           filter(d-> d.getCalories()>300)
+					   .skip(2)
+					   .collect(toList());
+*Stream-Mapping---------
+ Mapping - a very common data processing idiom is to select information from certain objects.for example SQL you can select a particular 
+           column from a table.the streams API provides similar facilities through the map and flatmap methods.
+		   
+		   applying a function to each element of a stream -- streams support the method map.which takes of function as argument.the function        
+		                                                      a applied to each element mapping into a new element (the word mapping is used because it 
+															  has meaning similar transforming but with the naunce of creating a new version of rather than modifying.
+															  
+							ex-1	List<String> dishNames=menu.streams()
+								                           .map(Dish::getName)
+														   .collect(toList());
+														   
+		                    ex-2    List<String> words=Arrays.asList("java8","lambdas","in","Action");
+							        List<Integer> wordLength=words.stream()
+									              .map(String::length)
+												  .collect(toList());
+												  
+Stream - Mapping
+         Flatmap for the rescue
+		 List<String> uniqueCharacters = words.stream()
+		              .map(w-> w.split(""))
+					  .flatmap(Arrays::stream)
+					  .distinct()
+					  .collect(Collectors.toList());
+		//using the flatmap method has the effect of mapping each array not with a stream but with the contents of that system.
+		
+		List<Integer> numbers=Arrays.asList(1,2,3,4)
+		List<Integer> squares=numbers.stream().map(n->(n*n).collect(Collectors.toList());
+		
+*Streams Finding and Matching
+ checking to see if a predicate matches all elements - 
+        1.allMatch
+         the all match method works similarly to anymatch but will check to see if all the elements of the stream match the given predicate for example
+		 you can use it to find out whether the menu is healthy(that is all dishesh are below 1000 calaries)
+		 
+		 boolean healthy =menu.stream().allMatch(d->d.getCalories()<1000);
+		
+		2.NonMatch
+		 boolean isHealthy=menu.stream().nonMatch(d->d.getCalories()>=1000);
+		 *These three operations ,anyMatch,allMatch,and nonMatch,make use of what we call short-circuiting a stream version of the familier java short-cuicuiting
+		  && and || operators.
+		  
+		3.Findding element = The findAny method return any arbitory element of the current stream.it can be used in conjuction with other stream operation. 
+		                     for example you wish to find a dish thats vegeterian.you can combine the filter method and findAny to express this query.
+							 
+							 Optional<Dish> dish=menu.stream()
+							                     .filter(Dish::isVegeterian)
+												 .findAny();
+		4.Find first --
+		    List<Integer> someNumebers=Arrays.asList(1,2,3,4);
+                          Optional<Integer> firstSquareDivisibleByThree = someNumbers.stream()
+                          map(x->x*x)
+                          .filter(x->x%3==0)
+                          .findFirst();
+                       
+*Streams - Reducing
+Summing the elements : Before we investigate how to use the reduce method.it helps to first see how you sum of elements of list of numbers using a for-each loop
+                     int sum=0;
+                     for(int x=:numbers){
+                        sum+=x;
+                    }
+            Each element of numbers is combined iteratively with the addition operator to form a result. you reduce the list of numbers into one numbers by 
+			repeatadly using addition.there are two parameters in this code.
+			1.the initial value of the sum variable in this value 0
+			2.the operation to combine all the elements of the list, in this case +
+			
+			HOW IT WORKS ---------
+			int sum=numbers.stream().reduce(0,(a,b)->a+b);
+			
+			reduce takes two argument:
+			  1.an initial value here 0.
+			  2.A 	BinaryOperator<T> to combine two elements and produce a new value.here you use lambda(a,b)->a+be
+			
+			
+	how would you count the number of dishes in a stream using the map and reduce methods?
+	-->  int count=menu.stream()
+	                   .map(d->1)
+					   .reduce(0,(a,b)->a+b)
+	
+	STREAMS SUMMARY - 
+    filter, 
+	distinct,
+	skip,
+	limit,
+	map,
+	flatmap,
+	sorted,
+	anyMatch,
+	nonMatch,
+	allMatch,
+	findAny,
+	findFirst,
+	forEach,
+	collect,
+	reduce,
+	count
+	
+	Streams - Stateless vs Stateful-----------------
+	*operations like map and filter take each element from the input stream and produce and produce zero or more result  
+	in the output stream.these operations are thus in general stateless. they dont have an internal state.
+	*but operations like reduce,sum, and max need to have internal state to accumulate the result by contrast,same operations such as sorted
+	 or distinct see at first to behave like filter or map all take a stream an produce another stream but there crucial different both sharing 
+	 both sorting and removing duplicates from a stream require knowing the previous history to do their job. sorting requires all the elements to bebuffered 
+	 before a single item can be  added to the output stream.we call these operations stateful operations.
+	 
+	----
+	--- get all the record transaction of 2011 ---
+	List<Transaction> result=transactions.stream()
+	    .filter((Transaction transaction)-> transaction.getYear() == 2011)
+		.sorted(Comparator.comparing(Transaction::getValue))
+		.collect(Collectors.toList());
+		System.out.println(result);
+		
+	Quetion 2----
+	   what are all the unique cities where the traders work ?
+	   List<String> result1= transactions.stream()
+	                .map((Transaction t)-> t.getTrader())
+					.map((Trader trader) -> trader.getCity())
+					.distinct()
+					.collect(Collectors.toList());
+					System.out.println(result1);
+					
+	    way 2---
+		  List<String> cities=transactions.stream()
+		               map(t->t.getTrader().getCity())
+					   .distinct()
+					   .collect(Collectors.toList());
+					   
+					   
+	Quetion 3----
+	    find all traders from chenai and sort them by name.
+		transactions.stream()
+		   .map((Transaction t)->t.getTrader())
+		   .filter((Trader t)->t.getCity.equalsEgnoreCase("Chennai"))
+		   .distinct()
+		   .sorted(Comparator.comparing(Trader::getName))
+		   .collect(Collectors.toList());
+		   
+    Quetion 4----
+	    return a string of all traders names sorted alphabetically
+        String names=transactions.stream()
+        .map((Transaction t) -> t.getTrader().getName())
+        .distinct()
+        .sorted()
+        .reduce("",(a,b)->a+b"");
+        System.out.println(names);
+		
+	Quetion 5--
+	    what the highest value of all transactions ?
+		Integer highestvalue=transactions.stream
+		        .map(t->t.getValue())
+				.reduce(Integer::max)
+				.get();
+				System.out.println(highestvalue);
+				
+	Quetion 6--
+	    Find the transaction with the smallest value
+		Transaction((a,b)->a.getValue()<b.getValue()?a:b)
+		.get();
+		System.out.println(tran);
+		}
+		}
+		
+
+Afternoon sessions------------------------
+
+--Numeric streams - java 8 introduces three primitive specialized stream interfaces to tackle this issue.IntStream DoubleStream and LongStream
+                    that respectively specialize the elements of a stream to be int,long and double-and thereby avoid hidden boxing costs.
+					
+			1.to convert from primitive to a general stream(each int will be boxed to an integer)you can use the method boxed as follows.
+			IntStream intStream=menu.stream().mapToInt(Dish::getCalories); //converting stream to a numeric stream
+			Stream<Integer> stream=intStream.boxed(); // converting the numeric stream to a stream
+			
+			
+			2.suppose you like to generate all numbers between 1 and 100.java 8 introduces two static methods available on IntStream and LongStream
+			  to help generate such ranges:range and rangeClosed.
+			  
+			  IntStream evenNumbers=IntStream.rangeClosed(1,100)
+			                                  .filter(n->n%2==0);
+											  System.out.println(evenNumbers.count());
+											  
+--Stream from values--
+    you can create a stream with explicit values by using the static method Stream of.which can take any           
+	number of parameters.for example in the following code you can create a stream of strings directly using Stream.of
+	you then convert the strings to uppercase before printing them one by one.
+	    Stream<String> stream=Stream.of("Java8","Lambdas","In","Action");
+		stream.map(String::toUpperCase).forEach(System.out.println);
+
+
+--Convert Arrays to the Stream ---
+    you can create a stream from an array using the static method Arrays.stream which takes an array as parameters
+    int[] numbers={2,4,56,8,9};
+    int sum=Arrays.stream(numbers).sum();
+
+    -----------------------------------
+    HANDS ON---
+    calculate the sum of all transaction values using int stream
+    Integer sumofAllTransaction = transaction.stream().mapToInt(Transaction::getValue)
+                        .sum();
+						System.out.println(sumofAllTransaction);
+						
+--Collecting data with streams----
+    collect to use Collectors.toList() to collect it in a collection.
+	in this section we are going to explore more on that.
+	here are same example queries of what be able collect and collectors
+	
+--joining string --
+    concatenate the names of all the dishes in the menu as follows
+	String shortMenu=menu.stream().map(Dish::getName).collect(joining());
+	
+	
+--GROUPING--
+    suppose you want to classify the dishes in the menu according to their type,putting the ones containing meat in a group
+	the ones wish fish in another group and all others in a third group you can easily perform this task using a collector returned by the
+	Collectors.groupingBy factory method as follows.
+	Map<Dish,Type,List<Dish>>dishesByType=menu.stream().collect(groupingBy(Dish::getType))
+	--result will looks like example
+	{FISh=[prawns,salmon],OTHER=[french fries,rice,season fruit,pizza],MEAT=[pork,beef,chicken]}
+	
+--Multilevel Grouping --
+    you can achieve multilevel grouping by using a collector created with a two-argument version of the Collectors.groupingBy
+	Map<Dish.Type,Map<CaloricLevel,List<Dish>> dishesByTypeCaloricLevel = 
+	       menu.stream().collect(
+		      groupingBy(Dish::getType,
+			  groupingBy(dish->{
+			  if(dish.getCalories()<=400)return CaloricLevel.DIET;
+			  else if(dish.getCalories()<=700) return CaloricLevel.NORMAL;
+			  else return CaloricLevel.FAT;
+			  }}
+			  }
+			  };
+			  
+--PARTITIONING --
+  partitioning is a special case of grouping having a predicate a function returning a boolean called a partitioning function,as a collection
+  function returns boolean means the resulting grouping map will have a boolean as a key type and therefore there can be at most two different groups
+  one or true and one for false.
+  Map<Boolean,List<Dish>> partitionedMenu=menu.stream().collect(partitioningBy(Dish::isVegeterian));
+  output---
+  {false=[pork,beef,chicken]
+  true=[frenchfires ,pizza]
+  
+
+COLLECTING DATA WITH STREAMS HANDS ON --
+    Quetion 1.
+    find the list of transactions based on year and store it in a map
+    Map<Integer,List<Transaction>> groupByYear = transactions.stream()
+        .collect(Collectors.groupingBy(t->t.getYear());
+
+    Quetion 2.
+    group the transaction in a map.group it such that transaction value less than 500 as true and transaction value greater than 500 as false
+    Map<Boolean,List<Transaction> partitionedBy500 = transaction.stream().collect
+        (Collectors.partitioningBy(t->t.getValue()<500));
+        System.out.println(PartitionedBy500);
+
+
+PARALLEL STREAM --------
+* its possible to turn a collection into a parallel stream by invoking the method parallelStream on
+the collectio source.
+* a parallel stream is a stream is a stream that splits its element into multiple chunks,processing each chunk with a different thread.
+* you can automatically partiiton the workload of a given operation on all the cores of your multicore processor and keep all of them equally busy.
+
+pulic static long sequentialSum(long n){ -------------------------> simple example without parallel
+   return Stream.iterate(1L, i->i+1)
+   .limit(n)
+   .reduce(0L,Long::sum);
+   }
+ --------------------------------------
+ With parallel stream
+ you can make the former functional reduction process(that is summing)run in parallel by turning the stream into a parallel one
+ public static long parallelSum(long n){
+    return Stream.iterate(1L, i->	i+1)
+	.limit(n)
+	.parallel()
+	.reduce(0L,Long::sum);
+	}
+	
+Defaults Method ------
+   *Traditinally a java interface groups related methods together into a contract,any class that implements
+   an interface an interface must provide an implementation for each method defined by the interface.
+   *this is particularly problematic because the java 8 api introduce many new methods an existing interfaces such as the sort method on the list interface
+   ------------
+   interfaces in java 8 can now declare method with implementation code two ways.
+   1.java 8 allows static methods inside interfaces.
+   2.second java 8 introduces a new feature called default methods that allows you to provide a default implementation for methods in an interface.
+   
+   **WHAT IS THE DIFFERENCE BETWEEN ABSTRACT CLASS AND AN INTERFACE ?
+   --> using abstract class we can maintain the state
+       we can use instance variable ibstract class 
+       in interface we can not maintain state 
+       in interface we can not use instance variable only static variable
+       we can create the constructor in abstract class
+       not in interface	   
+   
+    **Default Method Quiz
+	 1.
+	 public class D implements A{
+	   public void hello(){
+	     System.out.println("hello from D");
+		 }
+	    }
+		public class c extends D implements A{
+		  public static void main(String args){
+		    new C().hello();
+			}
+	     }
+		 output will be------hello from D because class always win
+		 
+		
+	2. 
+	public interface A{
+	  default interface A{
+	    default Number getNumber(){
+		   return 10;
+		   }
+		}
+		public interface B{
+		  default Integer getNumber(){
+		    return 42;
+		   }
+		 }
+		 
+		public class c implements B,A{
+		  public static void main(String args[]){
+          System.out.println(new c(),getNumber());
+        }
+    }
+    we will get the error because compiler will confise which method should call ambiguity issue
+    to overcome this problem
+    solutions ----
+    public class c implements B,A{
+      void hello(){
+      B.super.hello();
+    }
+  }
+
+    3. Diamond problem  
+       public interface A {
+       default void hello(){
+         System.out.println("hello from A");
+        }
+       }
+       public interface B extends A{}
+       public interface C extends A{}
+       public class D implements B,C{
+          public static voud main(String ..args[]){
+          new D().hello(); 
+      } 
+    }		  
+	
+----Optional ----------
+    if you ever got a NullPointerException during coding
+	
+	*Problems with null - its source of error.nullPointerException is by the most common exception in java
+	*it bloats your code.it worsens readability by making if necessary to fill your code with often deeply nested null checks.
+	*it breaks java philosophy.java always hides pointers from developers except in one case the null pointer.
+	
+	java 8 introduce a new class called java.util.Optional<T> that inspired by the ideas of Haskell and scala its class that encapsulate an optional value.
+	*when value is present ,the optional class just wraps it.conversely the absense of a values is modeled with an "empty"optional
+	
+	*Redefining the person/car/insurance data model using Optional 
+	public class person{
+	   private Optional<Car> car; 
+	   public Optional<car> getCard(){return car;} ///a person might not own car so declaire this field optional
+	   }
+	   public class Car{
+	     private Optional<Insurance> insurance;
+		 public Optional<Insuarance> getInsurance(){return insurance;}
+		 }
+		 public class Insurance {
+		 private String name;
+		 public String getName(){ return name;}
+		 }
+	
+
+    Empty Optional---
+    can get hold an empty optional object using the static factory method Optional.emty;
+    Optional<Car> optCar=Optional.empty();
+    
+    *Optional from a non-null value:
+    you can also create an optional from a non-null value with the static factory method Optiona.of
+    Optional<Car> optcar=Optional.of(car);
+    Note--if car were null a nullPointerException would be immediatelythrown 
+
+    Optional<Car> optCar=Optional.ofNullable(car);
+    //if car were null,the resulting Optional object would be empty
+	
+	****
+	Dafault actions and unwrapping an optional
+	- get() is the simplest but also the least safe of these methods.it returns the wrapped value if present but throws a NoSuchElementException otherwise.
+	- orElse(T Other) - it allows you to provide a default value for when the optional doesnt contain a value.
+	- orElseGet(Supplier<?extends T> other) - is the lazy conterpart of the orElse method,because the supplier is invoked only if the optional contain a value.
+	- orElseThrow(Suppplier<?extends X>exceptionSupplier) is similar to the get method in that it throws an exception when the optional is emty but in this
+	  case it allows you to choose the type of exception that you want to throw.
+	- ifPresent(Consumer<?super T>consumer) lets you execute the action given as argument if a value is present.otherwise no action is taken.
+	
+	
+	Optional ---
+	Filtering and optional - supposing the person class of our person/car/insurance model also method getage to access the age of the person,so that
+	the insurance company name is returned only if the person has an age greater than or equal to the minAge argument
+	public String getCarInsuranceName(Optional<Person> person,int minAge)
+	return person.filter(p->p.getage()>=minAge)
+	.flatmap(Person::getCar)
+	.flatmap(Car::getInsurance)
+	.map(Insuarance::getName)
+	.orElse("Unknown")
+	
+	METHODS---------------
+	empty - returns an empty Optional instance 
+	filter - if the value if present and matches the given predicate,returns this optional otherwise returns the empty one.
+	flatmap- if a value is present returns the optional resulting from the application of the provided mapping function to it otherwise returns the empty optional.
+	get - returns the value wrapped by this optional if present otherwise throws a NoSuchElementException
+	ifPresent ,isPresent,map,of,ofNullable,orElse,orElseGet,orElseThrow.
+	
+	
+	-----------------------------
+	CompletableFuture --
+	*CompletableFuture is used for asynchronous programming in java.Asynchronous programming is a means of writing non-blocking code by running
+	a task on a seperate thread than the main application thread an notifying the main thread about its progress,completion or failure.
+	*this way your main thread does not block/wait for te completion of the task and it can execute other tasks in parallel.
+	*having this kind of parallism greatly improves the performance of your programs.
+	
+	*Running asynchronous computation using nonAsync() -- if you want to run some background task asynchronously and dont want to return anything from
+	              the task then you can use CompletableFuture.runAsync() method.it takes a Runnable object and returns CompletableFuture<void>
+				  
+				  CompletableFuture<void> future = CompletableFuture.runAsync(()->{
+				     try{
+					   TimeUnit.SECONDS.sleep(1);
+					   }catch(InterruptedException e){
+					     throw new IllegalStateException(e);
+						 }
+						 System.out.println("will run saperate thread than the main thread)
+});
+
+    *Run task asynchronously and return the result using supplyAsync() -
+                   using completableFuture.supplyAsync() we can return a result.it takes a Supplier<T> and returns CompletableFuture<T>
+                   where T is the type of the value obtained by calling the given supplier.
+                   CompletableFuture<String> future=CompletableFuture.supplyAsync(()->{
+                    try{
+                      TimeOut.SECONDS.sleep(1);
+                      }catch(InterruptedException e){
+                       throw new IllegalStateException(e);
+                       }
+                       return "Result of the asynchronous computation";
+                      });
+    *passing a call back -- callback to the CompletableFuture using thenApply(), thenAccept() and thenRun() methods.
+
+     example --
+     CompletableFuture<String> whatsYourNameFuture = CompletableFuture.supplyAsync(()->{
+      try{
+         TimeUnit.SECONDS.sleep(1);
+         }catch(InterruptedException e)
+         {
+         throw new IllegalStateException(e);
+         }
+         returns "Rajeev";
+        });
+        //Attach a callback to the future using the Apply()
+        CompletableFuture<String> greetingFuture = whatsNameFuture.theApply(name->{
+          return "hello"+name;
+});
+    //block and get the result of the future
+    System.out.println(greetingFuture.get());   ///// Hello Rajeev
+	
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+JAVA 9 FEATURES -----------------------
+   *Modules -
+   modules are introduced to modularize java .
+   Lack of clarity an dependencies
+    -you may say we use maven
+	-dependencies while compile time what about run time dependencies
+	*Modularization -
+	  smaller jar files
+	  clear boundary of saperation
+	*Modules -
+	  java ecosystem has been modularized - this was the primary goal
+	  it is not mandatory to use modules but its better if we use it .
+	  
+	  
+	  
+	  **jlink introduced in java 9
+	    it is command line tool
+		jlink allows us to create stripped down binaries
+		
+		
+	**process API-------
+	  the process api has been improved for controlling and managing operating-system processes.
+	  the class java.lang.ProcessHandle contains most of the new functionalities.
+	  
+	**private methods in interface --
+	  interfaces can have private methods.which can be used to split lengthy default methods.
+	  interface InterfaceWithPrivateMethods
+	  {
+	    private static String staticPrivate(){
+		 return "static private";
+		 }
+		 private String instancePrivate(){
+		 return "instance private";
+		 }
+		 default void check(){
+		 String result=staticPrivate();
+		 InterfaceWithPrivateMethods PVT=new InterfaceWithPrivateMethods()
+		 {
+		 result=pvt.instancePrivate();
+		 }
+		 }
+		 
+		 
+		 
+    **jshell tool ---
+	   jshell is an REPL tool(Reale-eval-print-loop)
+	   we can run this java code in command line tool
+	   like open cmd and type jshell.
+	   
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+JAVA 10 FEATURES -----------------
+    Local variable type reference 
+	instance variable -NO
+	var is not keyword because of background compatability
+	HashMap<String,String> ughThisIsSoVerbose=new HashMap<>();
+	can be change into --
+	var succict=new HashMap<String,String>();
+	var keyword is allows developers to declare local variables without specifying a data type such as int,long,string or char.
+	a new language feature introduced in the jdk 10 release the java var keywords performs type inference.
+	
+	//var n ; //illegal use can not use var without initializer.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+JAVA 11 FEATURES ----------
+    *String class--
+     isBlank
+     lines
+     strip -- removes both leading and trailing white spaces from the string
+     stripLeading
+     stripTrailing
+     repeat
+    isBlank vs isEmpty
+    isEmpty checks for String length ,returns true if string length is 0
+    
+    public class Main{
+    public sttaic void main(String args[]){
+      System.out.println("ABC".isBlank());  //false  
+      System.out.println(" ".isBlank()); //true
+	  
+	  System.out.println("ABC".isEmpty()); //false
+	  System.out.println(" ".isEmpty()); //false
+	  
+	  **Repeat ---
+	  concatenates and repeats the same string N times
+	  String name="jay";
+	  String newName=name.repeat(5);
+	  System.out.println(newName);
+	  
+	  //output --- jay jay jay jay jay
+	  
+	  
+	 **New File methods ---
+	 easier to read string from a file and write string to a file
+	 Path filePath=Files.writeString(Files.createFile(dir,"demo.txt"),"sample text");
+     String fileContent=Files.readString(filePath);
+
+
+     **Collection to Array --
+       toArray() method added to collection
+       List<String> names=Arrays.asList("Arunan","Elamparithi");
+       String[] converted = names.toArray(String[]::new);
+
+
+     **No need compile
+       previous version
+       javac heloo.java
+       java heloo
+       
+       from java 11
+       java hello.java
+	   
+	new methods to the string class added.
+	 *indent
+	 *transform
+	 
+	 indent---
+	 String text="Hello Learners!\nThis is java 12";
+	 text=text.indent(4);
+	 System.out.println(text);
+	 text=text.indent(-10);
+	 System.out.println(text);
+	 output ---
+	   Hello Learners
+	   This is java 12
+	 Hello Leaners
+	 This is java 12
+	 
+	 *Transform --tranform accept a function
+	 String transformed=text.transform(value ->new StringBuilder(value).reverse().toString()
+	 
+	 **Files
+	 ::mismatch --
+	   *this method to use to compare two files and find the position of the first
+	   *the return value will be a long and -1 if the files are identical
+	   @Test
+	   public void 
+	   givenIdenticalFiles_theShouldNotFindMismatch(){
+	     Path filepath1=Files.createTempFile("file1",".text");
+		 Path filePath2=Files.createTempFile("file2",".txt");
+		 Files.writeString(filePath1,"java 12 article");
+		 Files.writeString(filePath2,"java 12 article";
+		 long mismatch=Files.mismatch(filePath1,filePath2);
+		 assertEquals(-1,mismatch);
+		 
+		 
+	**Preview Changes : Switch expression ------
+	OLD syntax ---
+	  DayOfWeek dayOfWeek = LocalDate.now().getDayOfWeek();
+	  String typeOfDay="";
+	  switch(DayOfWeek){
+	    case MONDAY;
+		case TUESDAY;
+		case WEDNESDAY;
+		case THURSDAY;
+		case FRIDAY;
+		typeOfDay="working day":
+		break;
+		case SATURDAY;
+		case SUNDAY;
+		typeOfDay="Day off";
+		}
+		
+		**NEw syntax --
+		DayOfWeek dayOfweek=LocalDate.NOW().getDayOfWeek();
+		String typeOfDay=switch(dayOfweek){
+		case MONDAY,TUESDAY,WEDNESDAY,THURSDAY,FRIDAY -> "working day";
+		case SATURDAY,SUNDAY-> "DAY OFF":
+		};
+		
+		**with java 12 we can declare the new typecasted variable directly in the statement.
+		if(obj instanceof String s){
+		 int length = s.length();
+		 }
+		 
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+JAVA 13 AND 14 FEATURES
+    preview changes : switch
+	using yeild we can now effectively return values from a switch expression
+	@Test
+	@SuppressWarnings("preview)
+	public void test(){
+	var me=4;
+	var operation ="squareMe";
+	var result=switch(operation){
+	case "doubleMe" ->{
+	   yeild me*2;
+	   }
+	  case "squareMe"->{
+	   yeild me*me;
+      }
+      default -> me;
+	};
+	assertEquals(16,result);
+	}
+	
+	**Preview changes : Text Blocks
+	Earlier to embed json in our code we would declare it as string literal
+	String TEXT_BLOCK_JSON ="""
+	  {
+	    "name":"jayesh",
+		"website":"www.gogle.com"
+		}
+		""";
+	
+	**Records --------------------
+	  records were introduced to reduce repetative boilerplate code in data model POJOs
+	  prior java 14 we writen like this
+	  public class Person{
+	    private final String name;
+		private final int age;
+		public Person(String name,int age){
+		  this.name=name;
+		  this.age=age;
+		  }
+		  public String getName(){
+		   return name;
+		  }
+		  public int getAge(){
+		  return age;
+		  }
+		  }
+		NOW WE SIMPLY WRITE THIS FOLLOWING
+		public record Person(int age,String name){
+		}
+		this simple declaration will add all the things like getter,setter,contructors,string automatically.
+		but records not generate setters.
+		1.records is final,meaning you cannot create subclasses.
+		2.already record provide contructor of all combination if you want to define one then it alright.
+		
+--------------------------------------------------------------------------------------------------------------------------------------
+
+JAVA 15 FEATURES ------------
+      *Sealed class ----
+	  this feature is about enabling more fine-grained inheritance control in java.sealing allows classes and interfaces 
+	  to define their permitted subtypes.
+	  public abstract sealed class vehicle permits car.truck.bus{
+	    protected final String registerNumber;
+		public Vehicle(String registerNumber){
+		  this.registerNumber=registerNumber;
+		  }
+		  public String getRegistrationNumber;
+		  return registerNumber;
+		  }
+		  
+---------------------------------------------------------------------------------------------------------------------------------------
+JAVA 16 AND 17 FEATURES ---------
+   
+   *New DateTimeFormatter
+   a new period of day symbol "B" introduced as an alternative for am/pm
+   LocalTime date=LocalTime.parse("15:25:08:978798)
+   DateTimeFormatter formatter=DateTimeFormatter.ofPattern("h B");
+   prints,
+   3 in the afternoon
+   
+   
+
+	   
+	
+	
+	
+												  
+	
+
+   
+
+   
